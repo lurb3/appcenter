@@ -1,6 +1,5 @@
 const Joi = require('joi');
 const mongoose = require('mongoose')
-const bcrypt = require("bcryptjs")
 
 const ShoppingListSchema = new mongoose.Schema({
     name: String,
