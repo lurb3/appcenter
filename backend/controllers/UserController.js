@@ -14,18 +14,18 @@ const UserSignup = async (req, res) => {
 
     let user = await User.findOne({ email: email });
     if (user) {
-        return res.status(400).send('That user already exisits!');
-    } else {
-        const hashedPwd = await bcrypt.hash(password, saltRounds);
-        user = new User({
-            name: name,
-            email: email,
-            password: hashedPwd
-        });
-        await user.save();
-        user.password = null;
-        res.send(user);
+        return res.status(400).send({ message: 'That user already exisits!' });
     }
+
+    const hashedPwd = await bcrypt.hash(password, saltRounds);
+    user = new User({
+        name: name,
+        email: email,
+        password: hashedPwd
+    });
+    await user.save();
+    user.password = null;
+    res.send(user);
 }
 
 const UserSignin = async (req, res) => {
