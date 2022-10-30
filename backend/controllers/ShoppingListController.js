@@ -1,9 +1,10 @@
 require('dotenv').config();
 const { ShoppingList, validate } = require('../models/ShoppingList');
+const { Product } = require('../models/Product');
 
 const AddShoppingList = async (req, res) => {
     const { error } = validate(req.body);
-    const { name } = req.body;
+    const { name, description } = req.body;
 
     if (error) {
         return res.status(400).send(error.details[0].message);
@@ -12,11 +13,12 @@ const AddShoppingList = async (req, res) => {
     let shoppingList = await ShoppingList.findOne({ name: name, userId: req.userId });
 
     if (shoppingList) {
-        return res.status(400).send({ message: 'You already own that list' });
+        return res.status(400).send({ message: 'You already own that shopping list' });
     }
 
     shoppingList = new ShoppingList({
         name: name.toLowerCase(),
+        description: description,
         userId: req.userId
     });
 
@@ -40,5 +42,15 @@ const GetUserShoppingList = async (req, res) => {
 
     return res.send(shoppingList);
 }
+const DeleteShoppingList = async (req, res) => {
+    await Product.deleteMany({ shoppingListId: req.params.shoppingListId });
+    let shoppingListToDelete = await ShoppingList.deleteOne({ _id: req.params.shoppingListId });
 
-module.exports = { AddShoppingList, GetAllUserShoppingLists, GetUserShoppingList };
+    if (shoppingListToDelete.deletedCount > 0) {
+        return res.send({ message: "Shopping list deleted successfully" });
+    }
+
+    return res.status(404).send({ message: 'Shopping list not found' });
+}
+
+module.exports = { AddShoppingList, GetAllUserShoppingLists, GetUserShoppingList, DeleteShoppingList };

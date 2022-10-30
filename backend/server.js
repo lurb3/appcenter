@@ -10,6 +10,8 @@ mongoose.connect(url);
 app.use(express.json());
 app.use('/api/user', routes.users);
 app.use('/api/shopping_list', routes.shoppingList);
+app.use('/api/product', routes.product);
+
 app.listen(port, () => console.log("Server ready"));
 
 // User - Shopping Lists - Shopping Items

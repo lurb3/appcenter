@@ -7,3 +7,5 @@ router.post('/', authJWT, ShoppingListController.AddShoppingList);
 router.get('/', authJWT, ShoppingListController.GetAllUserShoppingLists);
 router.get('/:shoppingListId', authJWT, ShoppingListController.GetUserShoppingList);
 module.exports = router;
+router.delete('/:shoppingListId', authJWT, ShoppingListController.DeleteShoppingList);
+module.exports = router;
