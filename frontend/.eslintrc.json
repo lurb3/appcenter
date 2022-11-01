@@ -23,6 +23,9 @@
     ],
     "rules": {
         "require-jsdoc": 0,
-        "indent": ["error", 2]
+        "indent": ["error", 2],
+        "object-curly-spacing": ["error", "always"],
+        "array-bracket-spacing": ["error", "always"],
+        "max-len": "off"
     }
 }

@@ -3,8 +3,8 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-} from "react-router-dom";
-import Login from "./pages/Login/Login";
+} from 'react-router-dom';
+import Login from 'pages/Login/Login';
 
 const App = () => {
   return (
@@ -14,6 +14,7 @@ const App = () => {
         </Route>
       </Routes>
     </Router>
-  )
-}
+  );
+};
+
 export default App;

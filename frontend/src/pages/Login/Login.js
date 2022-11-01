@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import apiUtil from 'utils/api';
 import { setJwt } from 'utils/jwt';
-import { TextField, Button  } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import './login.scss';
 
 const Login = () => {
-
   const [ userName, setUserName ] = useState('');
   const [ userEmail, setUserEmail ] = useState('');
   const [ userPassword, setUserPassword ] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    apiUtil().post('/user/login', {name: userName, email: userEmail, password: userPassword})
-    .then(res => {
-      if (res.data.token) setJwt(res.data.token);
-    })
-  }
+    apiUtil().post('/user/login', { name: userName, email: userEmail, password: userPassword })
+      .then((res) => {
+        if (res.data.token) setJwt(res.data.token);
+      });
+  };
 
   return (
     <div className='formWrapper'>
@@ -28,7 +27,7 @@ const Login = () => {
         <Button variant="contained" type='submit'>Login</Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 export default Login;
