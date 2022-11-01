@@ -1,6 +1,4 @@
-<h1>TODO</h1>
+# TODO<
 
-<ul>
-    <li>Add token expiration</li>
-    <li>Validate API URL param ID's</li>
-</ul>
+- Add token expiration
+- Validate API URL param ID's
