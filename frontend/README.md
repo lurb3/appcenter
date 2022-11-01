@@ -1,6 +1,8 @@
 # TODO
 
 - Incorporate lint
+- Add github actions
+- Github merge to dev branch (Create dev branch)
 
 # Getting Started with Create React App
 
