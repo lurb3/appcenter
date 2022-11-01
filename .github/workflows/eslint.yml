@@ -1,0 +1,24 @@
+name: CI
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: npm install
+      working-directory: frontend
+    - name: Run ESLint
+      run: npm run lint
+      working-directory: frontend
