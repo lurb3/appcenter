@@ -1,13 +1,15 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes/index');
-const port = parseInt(process.env.PORT, 10) || 3000;
+const port = parseInt(process.env.PORT, 10) || 4000;
 const url = "mongodb://127.0.0.1:27017/appcenter";
 
 mongoose.connect(url);
 
 app.use(express.json());
+app.use(cors());
 app.use('/api/user', routes.users);
 app.use('/api/shopping_list', routes.shoppingList);
 app.use('/api/product', routes.product);

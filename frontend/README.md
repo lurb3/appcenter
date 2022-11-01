@@ -1,3 +1,9 @@
+# TODO
+
+- Incorporate lint
+- Add github actions
+- Github merge to dev branch (Create dev branch)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
