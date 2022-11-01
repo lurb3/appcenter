@@ -14,7 +14,7 @@ const UserSignup = async (req, res) => {
 
     let user = await User.findOne({ email: email });
     if (user) {
-        return res.status(400).send({ message: 'That user already exisits!' });
+        return res.status(400).send({ message: 'That user already exists!' });
     }
 
     const hashedPwd = await bcrypt.hash(password, saltRounds);
