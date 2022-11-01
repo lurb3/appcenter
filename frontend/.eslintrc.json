@@ -13,10 +13,16 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
     "plugins": [
         "react"
     ],
     "rules": {
-        "require-jsdoc": 0
+        "require-jsdoc": 0,
+        "indent": ["error", 2]
     }
 }
