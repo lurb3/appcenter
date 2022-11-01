@@ -5,7 +5,7 @@ const ShoppingListSchema = new mongoose.Schema({
     name: String,
     description: String,
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-});
+}, { timestamps: true });
 
 const validateShoppingList = (list) => {
     const schema = Joi.object({
