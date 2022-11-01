@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
-      run: npm
+      run: npm install
     - name: Run ESLint
-      run: npm eslint src/**/*.js
+      run: npm lint
