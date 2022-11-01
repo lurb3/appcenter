@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema({
     price: Number,
     quantity: Number,
     shoppingListId: { type: mongoose.Schema.Types.ObjectId, ref: 'ShoppingList' },
-});
+}, { timestamps: true });
 
 const validateProduct = (list) => {
     const schema = Joi.object({
