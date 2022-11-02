@@ -15,5 +15,3 @@ app.use('/api/shopping_list', routes.shoppingList);
 app.use('/api/product', routes.product);
 
 app.listen(port, () => console.log("Server ready, on port: " + port + " MongoDB URL: " + url));
-
-// User - Shopping Lists - Shopping Items
