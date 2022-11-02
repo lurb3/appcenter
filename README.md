@@ -5,4 +5,4 @@
 - **Important:** Start developing another app, we need to manage and track tasks/ticket. Something like Obsidian/Trello. We need reminders and nagging stuff on this
 
 # Tips
-- Use Frontned/Backend readme for app instructions, use this file for todos and generic stuff
+- Use Frontend/Backend readme for app instructions, use this file for todos and generic stuff
