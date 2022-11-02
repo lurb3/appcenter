@@ -14,4 +14,4 @@ app.use('/api/user', routes.users);
 app.use('/api/shopping_list', routes.shoppingList);
 app.use('/api/product', routes.product);
 
-app.listen(port, () => console.log("Server ready, on port: " + port + " MongoDB URL: " + url));
+app.listen(port, () => console.log("🎉 Server up and running 🎉"));

@@ -40,7 +40,7 @@ const UserSignin = async (req, res) => {
     }
 
     return res.json({ token: jwt.sign(req.body, process.env.APP_SECRET, {
-        expiresIn: 20
+        expiresIn: 86400 //24h
     }), });
 }
 
