@@ -4,7 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const routes = require('./routes/index');
 const port = parseInt(process.env.PORT, 10) || 4000;
-const url = "mongodb://127.0.0.1:27017/appcenter";
+const url = process.env.MONGO_DB_URL;
 
 mongoose.connect(url);
 
