@@ -10,7 +10,7 @@ const AddShoppingList = async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
-    let shoppingList = await ShoppingList.findOne({ name: name, userId: req.userId });
+    let shoppingList = await ShoppingList.findOne({ name: name.toLowerCase(), userId: req.userId });
 
     if (shoppingList) {
         return res.status(400).send({ message: 'You already own that shopping list' });
