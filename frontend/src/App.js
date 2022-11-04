@@ -1,22 +1,26 @@
 import React from 'react';
+import history from 'utils/history';
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
+  unstable_HistoryRouter as HistoryRouter,
 } from 'react-router-dom';
 import Login from 'pages/Login/Login';
 import Signup from 'pages/Signup/Signup';
 import ShoppingList from 'pages/ShoppingList/ShoppingList';
+import ProtectedRoutes from 'ProtectedRoutes';
 
 const App = () => {
   return (
-    <Router>
+    <HistoryRouter history={history}>
       <Routes>
         <Route path="/" element={ <Login /> } />
         <Route path="/signup" element={ <Signup /> } />
-        <Route path="/shoppinglist" element={ <ShoppingList /> } />
+        <Route element={ <ProtectedRoutes /> } >
+          <Route path="/shoppinglist" element={ <ShoppingList /> } />
+        </Route>
       </Routes>
-    </Router>
+    </HistoryRouter>
   );
 };
 

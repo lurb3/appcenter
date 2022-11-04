@@ -1,0 +1,34 @@
+.signupWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #11223E;
+
+  .formWrapper {
+    background-color: white;
+    padding: 100px;
+    border-radius: 4%;
+  }
+  
+  .formFields {
+    display: flex;
+    flex-direction: column;
+  
+    & div {
+        margin-bottom: 10px;
+    }
+  }
+  
+  .colorWhite {
+    color: white;
+  }
+  
+  .loginLink {
+    margin-top: 10px;
+    &:active, &:visited {
+        color: black;
+    }
+  }
+}
