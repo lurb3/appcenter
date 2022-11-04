@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
     "@mui/x-data-grid": "^5.17.9",
     "@testing-library/jest-dom": "^5.16.5",
@@ -24,12 +25,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --max-warnings=0 src/**/*.js"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
+    "lint": "eslint src/**/*.js --ignore-path .gitignore",
+    "lint:fix": "npm run lint -- --fix"
   },
   "browserslist": {
     "production": [
@@ -46,6 +43,7 @@
   "devDependencies": {
     "eslint": "^8.26.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-react": "^7.31.10"
+    "eslint-plugin-react": "^7.31.10",
+    "prettier": "^2.7.1"
   }
 }
