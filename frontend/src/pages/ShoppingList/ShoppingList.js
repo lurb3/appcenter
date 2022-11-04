@@ -29,7 +29,7 @@ const ShoppingList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    apiUtil().post('/shopping_list', { name: listName, description: listDescription })
+    apiUtil().post("/shopping_list", { name: listName, description: listDescription })
       .then((res) => {
         setLists([ ...lists, res.data ]);
       });
