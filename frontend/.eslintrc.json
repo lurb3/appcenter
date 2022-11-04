@@ -19,7 +19,8 @@
         }
     },
     "plugins": [
-        "react"
+        "react",
+        "only-warn"
     ],
     "rules": {
         "require-jsdoc": 0,
