@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import apiUtil from 'utils/api';
 import { TextField, Button } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import './shoppinglist.scss';
 
 const ShoppingList = () => {
@@ -28,7 +29,7 @@ const ShoppingList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    apiUtil().post("/shopping_list", { name: listName, description: listDescription })
+    apiUtil().post('/shopping_list', { name: listName, description: listDescription })
       .then((res) => {
         setLists([ ...lists, res.data ]);
       });
@@ -50,8 +51,8 @@ const ShoppingList = () => {
             lists.map((item, index) => {
               return (
                 <div key={`${item?.name} ${index}`}>
-                  <Link to={`/shoppinglist/${item?._id}`}>{item?.name.charAt(0).toUpperCase() + item?.name.slice(1)}</Link>
-                  <Button variant="contained" color="error" onClick={(e) => handleDelete(e, item)}>Delete</Button>
+                  <Link className='listLink' to={`/shoppinglist/${item?._id}`}>{item?.name.charAt(0).toUpperCase() + item?.name.slice(1)}</Link>
+                  <Button color="error" onClick={(e) => handleDelete(e, item)}><DeleteIcon /></Button>
                 </div>
               );
             })
