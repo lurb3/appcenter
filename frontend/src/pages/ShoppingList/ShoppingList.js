@@ -28,7 +28,6 @@ const ShoppingList = () => {
     setListsData();
   };
 
-<<<<<<< HEAD
   if (loading) return null;
 
   return (
@@ -81,41 +80,6 @@ const ShoppingList = () => {
         </Grid>
       </Grid>
     </>
-=======
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    apiUtil().post("/shopping_list", { name: listName, description: listDescription })
-      .then((res) => {
-        setLists([ ...lists, res.data ]);
-      });
-  };
-
-  if (loading) return null;
-
-  return (
-    <div className='shoppingListWrapper'>
-      <div className='formWrapper'>
-        <form className='formFields' onSubmit={handleSubmit}>
-          <TextField id="outlined-basic" label="Name" variant="outlined" onChange={(e) => setListName(e.target.value)} />
-          <TextField id="outlined-basic" label="Description" variant="outlined" onChange={(e) => setListDescription(e.target.value)} />
-          <Button variant="contained" type='submit'>Create</Button>
-        </form>
-
-        <div>
-          {
-            lists.map((item, index) => {
-              return (
-                <div key={`${item?.name} ${index}`}>
-                  <Link className='listLink' to={`/shoppinglist/${item?._id}`}>{item?.name.charAt(0).toUpperCase() + item?.name.slice(1)}</Link>
-                  <Button color="error" onClick={(e) => handleDelete(e, item)}><DeleteIcon /></Button>
-                </div>
-              );
-            })
-          }
-        </div>
-      </div>
-    </div>
->>>>>>> 4e01485c8bc1285209a1120cb4ea551c617fe68c
   );
 };
 
