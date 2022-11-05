@@ -13,7 +13,7 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
     e.preventDefault();
     const res = await apiUtil().post(
       `/product/${shoppingListID}`,
-      { name: productName, price: productPrice, quantity: productQuantity }
+      { name: productName, price: productPrice, quantity: productQuantity },
     );
     setLists([ ...lists, res ]);
     setOpen(!open);

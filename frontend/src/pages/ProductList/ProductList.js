@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation } from 'react-router-dom';
 import apiUtil from 'utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -11,8 +11,8 @@ const ProductList = () => {
   const [ loading, setLoading ] = useState(true);
   const [ lists, setLists ] = useState([]);
   const [ openFormModal, setOpenFormModal ] = useState(false);
-  let location = useLocation();
-  let { shoppingListID } = useParams();
+  const location = useLocation();
+  const { shoppingListID } = useParams();
 
   const shoppingListName = location.state.name.charAt(0).toUpperCase() + location.state.name.slice(1);
 
@@ -87,7 +87,7 @@ const ProductList = () => {
         </Paper>
       </Grid>
     </Grid>
-  )
+  );
 };
 
 export default ProductList;

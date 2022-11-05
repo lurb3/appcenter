@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import apiUtil from 'utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import ShoppingFormModal from './components/Modal';
 import './shoppinglist.scss';
 
@@ -56,7 +56,7 @@ const ShoppingList = () => {
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        <Link className='listLink' to={`/shoppinglist/${list?._id}`} state={{name: list.name}}>
+                        <Link className='listLink' to={`/shoppinglist/${list?._id}`} state={{ name: list.name }}>
                           {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
                         </Link>
                       </TableCell>
