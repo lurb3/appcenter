@@ -3,7 +3,8 @@ import { useParams, Link, useLocation } from 'react-router-dom';
 import apiUtil from 'utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import { Dialog, DialogTitle, DialogActions, Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ProductFormModal from './components/Modal';
 import './productlist.scss';
 
@@ -11,6 +12,7 @@ const ProductList = () => {
   const [ loading, setLoading ] = useState(true);
   const [ lists, setLists ] = useState([]);
   const [ openFormModal, setOpenFormModal ] = useState(false);
+  const [ openDialog, setOpenDialog ] = useState(false);
   const location = useLocation();
   const { shoppingListID } = useParams();
 
@@ -29,6 +31,35 @@ const ProductList = () => {
     setListsData();
   };
 
+  const handleDeleteAll = async (req, res) => {
+    setLoading(true);
+    await apiUtil().delete(`/product/${shoppingListID}/all`);
+    setLists([]);
+    setLoading(false);
+    setOpenDialog(false);
+  };
+
+  const ConfirmDeleteAll = () => {
+    return (
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(!openDialog)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Delete all products for this shopping list?'}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
+          <Button onClick={handleDeleteAll} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
   useEffect(() => {
     setListsData();
   }, []);
@@ -44,19 +75,25 @@ const ProductList = () => {
       className='productListWrapper'
     >
       <ProductFormModal shoppingListID={shoppingListID} open={openFormModal} setOpen={setOpenFormModal} lists={lists} setLists={setLists} />
+      <ConfirmDeleteAll />
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>{shoppingListName} products</h1>
         <h4 className='colorWhite'>* Edit or remove a product</h4>
         <Paper>
           <div className='wrapperHeader'>
-            <Link className='addNew' to={`/shoppinglist`}>
-              {'<-'} Return
+            <Link to={`/shoppinglist`}>
+              <ArrowCircleLeftIcon color='primary' className='return' />
             </Link>
-            <button className='addNew' onClick={() => setOpenFormModal(!openFormModal)}>
-              Add new <AddCircleIcon />
-            </button>
+            <Grid>
+              <Button className='deleteAll' variant='contained' color='error' onClick={() => setOpenDialog(true)}>
+                Delete all <DeleteIcon />
+              </Button>
+              <Button variant='contained' color='primary' onClick={() => setOpenFormModal(!openFormModal)}>
+                Add new <AddCircleIcon />
+              </Button>
+            </Grid>
           </div>
-          <div className='formWrapper'>
+          <div>
             <TableContainer>
               <Table>
                 <TableHead>

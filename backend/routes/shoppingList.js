@@ -6,6 +6,8 @@ const ShoppingListController = require('../controllers/ShoppingListController');
 router.post('/', authJWT, ShoppingListController.AddShoppingList);
 router.get('/', authJWT, ShoppingListController.GetAllUserShoppingLists);
 router.get('/:shoppingListId', authJWT, ShoppingListController.GetUserShoppingList);
-router.delete('/:shoppingListId', authJWT, ShoppingListController.DeleteShoppingList);
+router.delete('/list/:shoppingListId', authJWT, ShoppingListController.DeleteShoppingList);
+router.delete('/all', authJWT, ShoppingListController.DeleteAllShoppingLists);
+
 
 module.exports = router;
