@@ -42,6 +42,7 @@ const GetUserShoppingList = async (req, res) => {
 
     return res.send(shoppingList);
 }
+
 const DeleteShoppingList = async (req, res) => {
     await Product.deleteMany({ shoppingListId: req.params.shoppingListId });
     let shoppingListToDelete = await ShoppingList.deleteOne({ _id: req.params.shoppingListId });
@@ -53,4 +54,19 @@ const DeleteShoppingList = async (req, res) => {
     return res.status(404).send({ message: 'Shopping list not found' });
 }
 
-module.exports = { AddShoppingList, GetAllUserShoppingLists, GetUserShoppingList, DeleteShoppingList };
+const DeleteAllShoppingLists = async (req, res) => {
+    let shoppingLists = await ShoppingList.find({ userId: req.userId });
+
+    if (! shoppingLists) return res.status(404).send({ message: 'Products not found' });
+
+    const products = await Product.deleteMany({shoppingListId: shoppingLists})
+    shoppingLists = await ShoppingList.deleteMany({ userId: req.userId });
+
+    if (shoppingLists.deletedCount <= 0) {
+        return res.send({ message: `No shopping list to delete` });
+    }
+
+    return res.send({ message: `Successfully deleted ${shoppingLists.deletedCount} shopping list(s) and ${products.deletedCount} product(s)` });
+}
+
+module.exports = { AddShoppingList, GetAllUserShoppingLists, GetUserShoppingList, DeleteShoppingList, DeleteAllShoppingLists };

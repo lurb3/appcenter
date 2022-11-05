@@ -51,4 +51,15 @@ const DeleteProduct = async (req, res) => {
     return res.status(404).send({ message: 'Product not found' });
 }
 
-module.exports = { AddProduct, GetShoppingListProducts, DeleteProduct };
+const DeleteAllShoppingListProducts = async (req, res) => {
+    let products = await Product.deleteMany({ shoppingListId: req.params.shoppingListId });
+
+    if (! products) return res.status(404).send({ message: 'Products not found' });
+    
+    if (products.deletedCount <= 0) {
+        return res.send({ message: `No products to delete` });
+    }
+    return res.send({ message: `Successfully deleted ${products.deletedCount} product(s)` });
+}
+
+module.exports = { AddProduct, GetShoppingListProducts, DeleteProduct, DeleteAllShoppingListProducts };
