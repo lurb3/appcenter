@@ -14,7 +14,6 @@ const apiUtil = () => {
 
   api.interceptors.response.use(
     (response) => {
-      console.log('Api response: ', response.data);
       return response.data;
     },
     (error) => {
@@ -24,7 +23,7 @@ const apiUtil = () => {
         clearJwt();
         history.push('/');
       }
-      console.log('API response error: ', error.response);
+      return response;
       // Reset stuff, do what you want
     },
   );

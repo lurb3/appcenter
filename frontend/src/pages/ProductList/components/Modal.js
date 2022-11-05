@@ -8,13 +8,15 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
   const [ productName, setproductName ] = useState('');
   const [ productQuantity, setProductQuantity ] = useState('');
   const [ productPrice, setProductPrice ] = useState('');
+  const [ productLink, setProductLink ] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await apiUtil().post(
       `/product/${shoppingListID}`,
-      { name: productName, price: productPrice, quantity: productQuantity },
+      { name: productName, price: productPrice, quantity: productQuantity, productLink: productLink },
     );
+    if (res.status === 400) return;
     setLists([ ...lists, res ]);
     setOpen(!open);
   };
@@ -28,6 +30,7 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
       <form className='formFields' onSubmit={handleSubmit}>
         <h3>Add new product</h3>
         <TextField className='field' size='small' id="outlined-basic" label="Name" variant="outlined" onChange={(e) => setproductName(e.target.value)} />
+        <TextField className='field' size='small' id="outlined-basic" label="Product Link" variant="outlined" onChange={(e) => setProductLink(e.target.value)} />
         <TextField type="number" className='field' size='small' id="outlined-basic" label="Price" variant="outlined" onChange={(e) => setProductPrice(e.target.value)} />
         <TextField type="number" className='field' size='small' id="outlined-basic" label="Quantity" variant="outlined" onChange={(e) => setProductQuantity(e.target.value)} />
         <Button size='small' variant="contained" type='submit'>Create</Button>

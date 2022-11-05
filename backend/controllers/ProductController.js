@@ -4,7 +4,7 @@ const { ShoppingList } = require('../models/ShoppingList');
 
 const AddProduct = async (req, res) => {
     const { error } = validate(req.body);
-    const { name, price, quantity } = req.body;
+    const { name, price, quantity, productLink } = req.body;
 
     if (error) {
         return res.status(400).send(error.details[0].message);
@@ -24,6 +24,7 @@ const AddProduct = async (req, res) => {
         name: name.toLowerCase(),
         price: price,
         quantity: quantity,
+        productLink: productLink,
         shoppingListId: req.params.shoppingListId
     });
 
