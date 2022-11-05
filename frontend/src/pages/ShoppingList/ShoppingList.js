@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import apiUtil from 'utils/api';
-import { TextField, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import ShoppingFormModal from './components/Modal';
 import './shoppinglist.scss';
 
 const ShoppingList = () => {
   const [ loading, setLoading ] = useState(true);
-  const [ listName, setListName ] = useState('');
-  const [ listDescription, setListDescription ] = useState('');
   const [ lists, setLists ] = useState([]);
+  const [ openFormModal, setOpenFormModal ] = useState(false);
 
   const setListsData = async () => {
     const lists = await apiUtil().get('/shopping_list');
@@ -27,39 +28,58 @@ const ShoppingList = () => {
     setListsData();
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    apiUtil().post("/shopping_list", { name: listName, description: listDescription })
-      .then((res) => {
-        setLists([ ...lists, res.data ]);
-      });
-  };
-
   if (loading) return null;
 
   return (
-    <div className='shoppingListWrapper'>
-      <div className='formWrapper'>
-        <form className='formFields' onSubmit={handleSubmit}>
-          <TextField id="outlined-basic" label="Name" variant="outlined" onChange={(e) => setListName(e.target.value)} />
-          <TextField id="outlined-basic" label="Description" variant="outlined" onChange={(e) => setListDescription(e.target.value)} />
-          <Button variant="contained" type='submit'>Create</Button>
-        </form>
-
-        <div>
-          {
-            lists.map((item, index) => {
-              return (
-                <div key={`${item?.name} ${index}`}>
-                  <Link className='listLink' to={`/shoppinglist/${item?._id}`}>{item?.name.charAt(0).toUpperCase() + item?.name.slice(1)}</Link>
-                  <Button color="error" onClick={(e) => handleDelete(e, item)}><DeleteIcon /></Button>
-                </div>
-              );
-            })
-          }
-        </div>
-      </div>
-    </div>
+    <>
+      <Grid
+        container
+        justifyContent='center'
+        alignItems='center'
+        height='100%'
+        className='shoppingListWrapper'
+      >
+        <ShoppingFormModal open={openFormModal} setOpen={setOpenFormModal} lists={lists} setLists={setLists} />
+        <Grid item xs={8} textAlign='center'>
+          <h1 className='colorWhite'>Shopping Lists</h1>
+          <h4 className='colorWhite'>* Select, edit or remove a list</h4>
+          <Paper>
+            <button className='addNew' onClick={() => setOpenFormModal(!openFormModal)}>
+              Add new <AddCircleIcon />
+            </button>
+            <div className='formWrapper'>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell component="th">Name</TableCell>
+                      <TableCell component="th" align='right'>Action</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {lists.map((list) => (
+                      <TableRow
+                        key={list.name}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row">
+                          <Link className='listLink' to={`/shoppinglist/${list?._id}`}>
+                            {list.name}
+                          </Link>
+                        </TableCell>
+                        <TableCell component="th" scope="row" align='right'>
+                          <button className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          </Paper>
+        </Grid>
+      </Grid>
+    </>
   );
 };
 
