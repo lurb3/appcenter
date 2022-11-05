@@ -27,7 +27,7 @@ const ProductList = () => {
     setLoading(true);
     await apiUtil().delete(`/product/${item._id}`);
     setListsData();
-  }
+  };
 
   useEffect(() => {
     setListsData();
@@ -78,7 +78,7 @@ const ProductList = () => {
                         {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <a href={list.productLink} target='_blank'>{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
+                        <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {list.quantity}
