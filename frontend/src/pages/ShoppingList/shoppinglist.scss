@@ -1,28 +1,30 @@
 .shoppingListWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
   background-color: #11223E;
 
-  .formWrapper {
-      background-color: white;
-      padding: 100px;
-      border-radius: 4%;
+  .addNew {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    outline: 0;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    color: #1565c0;
   }
-  
-  .formFields {
-      display: flex;
-      flex-direction: column;
-  
-      & div {
-          margin-bottom: 10px;
-      }
-  }
+
   .listLink {
     &:active, &:visited {
         color: black;
     }
+  }
+
+  .deleteButton {
+    color: #b31212;
+    background-color: transparent;
+    outline: 0;
+    border: 0;
   }
 }
