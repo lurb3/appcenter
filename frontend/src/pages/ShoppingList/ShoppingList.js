@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import apiUtil from 'utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ShoppingFormModal from './components/Modal';
 import './shoppinglist.scss';
 
@@ -49,6 +49,13 @@ const ShoppingList = () => {
           <div className='formWrapper'>
             <TableContainer>
               <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell component="th">Name</TableCell>
+                    <TableCell component="th">Description</TableCell>
+                    <TableCell component="th" align='right'></TableCell>
+                  </TableRow>
+                </TableHead>
                 <TableBody>
                   {lists.map((list) => (
                     <TableRow
@@ -59,6 +66,9 @@ const ShoppingList = () => {
                         <Link className='listLink' to={`/shoppinglist/${list?._id}`} state={{ name: list.name }}>
                           {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
                         </Link>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {list.description}
                       </TableCell>
                       <TableCell component="th" scope="row" align='right'>
                         <button className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></button>
