@@ -74,7 +74,7 @@ const ShoppingList = () => {
         <h1 className='colorWhite'>Shopping Lists</h1>
         <h4 className='colorWhite'>* Select, edit or remove a list</h4>
         <Paper>
-          <Grid display='flex' justifyContent='end'>
+          <Grid display='flex' justifyContent='end' padding='10px'>
             <Button className='deleteAll' variant='contained' color='error' onClick={() => setOpenDialog(true)}>
               Delete all <DeleteIcon />
             </Button>
