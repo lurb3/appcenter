@@ -30,10 +30,7 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
       <form className='formFields' onSubmit={handleSubmit}>
         <h3>Add new product</h3>
         <TextField className='field' size='small' id="outlined-basic" label="Name" variant="outlined" onChange={(e) => setproductName(e.target.value)} />
-<<<<<<< HEAD
         <TextField className='field' size='small' id="outlined-basic" label="Product Link" variant="outlined" onChange={(e) => setProductLink(e.target.value)} />
-=======
->>>>>>> 4ed4fcd2cfcf9ac49dfbab6be25c10019e0a928f
         <TextField type="number" className='field' size='small' id="outlined-basic" label="Price" variant="outlined" onChange={(e) => setProductPrice(e.target.value)} />
         <TextField type="number" className='field' size='small' id="outlined-basic" label="Quantity" variant="outlined" onChange={(e) => setProductQuantity(e.target.value)} />
         <Button size='small' variant="contained" type='submit'>Create</Button>

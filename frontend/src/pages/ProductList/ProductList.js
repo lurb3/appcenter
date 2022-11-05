@@ -62,10 +62,7 @@ const ProductList = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell component="th">Name</TableCell>
-<<<<<<< HEAD
                     <TableCell component="th">Product Link</TableCell>
-=======
->>>>>>> 4ed4fcd2cfcf9ac49dfbab6be25c10019e0a928f
                     <TableCell component="th">Quantity</TableCell>
                     <TableCell component="th">price</TableCell>
                     <TableCell component="th" align='right'></TableCell>
@@ -81,12 +78,9 @@ const ProductList = () => {
                         {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
                       </TableCell>
                       <TableCell component="th" scope="row">
-<<<<<<< HEAD
                         <a href={list.productLink} target='_blank'>{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
                       </TableCell>
                       <TableCell component="th" scope="row">
-=======
->>>>>>> 4ed4fcd2cfcf9ac49dfbab6be25c10019e0a928f
                         {list.quantity}
                       </TableCell>
                       <TableCell component="th" scope="row">
