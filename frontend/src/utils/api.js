@@ -18,7 +18,7 @@ const apiUtil = () => {
     },
     (error) => {
       const response = error.response;
-      if (response.status === 401) {
+      if (!response || response.status === 401) {
         clearJwt();
         history.push('/');
       }

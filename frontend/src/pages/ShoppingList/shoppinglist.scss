@@ -1,18 +1,8 @@
 .shoppingListWrapper {
   background-color: #11223E;
 
-  .addNew {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    padding: 5px;
-    text-decoration: none;
-    color: black;
-    outline: 0;
-    border: 0;
-    background-color: transparent;
-    cursor: pointer;
-    color: #1565c0;
+  .deleteAll {
+    margin-right: 10px;
   }
 
   .listLink {

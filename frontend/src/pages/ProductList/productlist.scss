@@ -4,20 +4,15 @@
   .wrapperHeader {
     display: flex;
     justify-content: space-between;
-    padding: 0px 10px;
+    padding: 10px 10px;
+
+    .return {
+      font-size: 30px;
+    }
   }
 
-  .addNew {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    text-decoration: none;
-    color: black;
-    outline: 0;
-    border: 0;
-    background-color: transparent;
-    cursor: pointer;
-    color: #1565c0;
+  .deleteAll {
+    margin-right: 10px;
   }
 
   .listLink {

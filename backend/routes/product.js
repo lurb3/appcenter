@@ -6,5 +6,6 @@ const ProductController = require('../controllers/ProductController');
 router.post('/:shoppingListId', authJWT, ProductController.AddProduct);
 router.get('/:shoppingListId', authJWT, ProductController.GetShoppingListProducts);
 router.delete('/:productId', authJWT, ProductController.DeleteProduct);
+router.delete('/:shoppingListId/all', authJWT, ProductController.DeleteAllShoppingListProducts);
 
 module.exports = router;
