@@ -68,7 +68,7 @@ const ShoppingList = () => {
                         </Link>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {list.description}
+                        {list?.description}
                       </TableCell>
                       <TableCell component="th" scope="row" align='right'>
                         <button className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></button>

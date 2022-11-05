@@ -39,7 +39,9 @@ const UserSignin = async (req, res) => {
       return res.status(401).json({ message: 'Authentication failed. Invalid user or password.' });
     }
 
-    return res.json({ token: jwt.sign(req.body, process.env.APP_SECRET, {
+    const data = {name: user.name, email: user.email, _id: user._id};
+
+    return res.json({ token: jwt.sign(data, process.env.APP_SECRET, {
         expiresIn: 86400 //24h
     }), });
 }

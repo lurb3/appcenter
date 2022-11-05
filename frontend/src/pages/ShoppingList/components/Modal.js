@@ -22,6 +22,7 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
       onClose={() => setOpen(!open)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      className='shoppingListModal'
     >
       <form className='formFields' onSubmit={handleSubmit}>
         <h3>Add new shopping list</h3>

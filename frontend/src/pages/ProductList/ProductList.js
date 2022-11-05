@@ -78,13 +78,17 @@ const ProductList = () => {
                         {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
+                        {
+                          list.productLink && (
+                            <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
+                          )
+                        }
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {list.quantity}
+                        {list?.quantity}
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {list.price}
+                        {list?.price}
                       </TableCell>
                       <TableCell component="th" scope="row" align='right'>
                         <button className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></button>
