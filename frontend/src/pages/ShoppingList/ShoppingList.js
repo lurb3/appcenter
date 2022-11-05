@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import apiUtil from 'utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Paper, Grid, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
 import ShoppingFormModal from './components/Modal';
 import './shoppinglist.scss';
 
