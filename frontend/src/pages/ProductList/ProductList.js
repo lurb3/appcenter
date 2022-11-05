@@ -78,11 +78,7 @@ const ProductList = () => {
                         {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
                       </TableCell>
                       <TableCell component="th" scope="row">
-<<<<<<< HEAD
                         <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
-=======
-                        <a href={list.productLink} target='_blank'>{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
->>>>>>> 9809856a3c1f64b5b74bf1c8f89ca978a9a5a596
                       </TableCell>
                       <TableCell component="th" scope="row">
                         {list.quantity}
