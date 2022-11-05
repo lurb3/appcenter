@@ -1,0 +1,35 @@
+.productListWrapper {
+  background-color: #11223E;
+
+  .wrapperHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 10px;
+  }
+
+  .addNew {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+    outline: 0;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    color: #1565c0;
+  }
+
+  .listLink {
+    &:active, &:visited {
+        color: black;
+    }
+  }
+
+  .deleteButton {
+    color: #b31212;
+    background-color: transparent;
+    outline: 0;
+    border: 0;
+  }
+}

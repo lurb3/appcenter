@@ -8,6 +8,7 @@ import {
 import Login from 'pages/Login/Login';
 import Signup from 'pages/Signup/Signup';
 import ShoppingList from 'pages/ShoppingList/ShoppingList';
+import ProductList from 'pages/ProductList/ProductList';
 import ProtectedRoutes from 'ProtectedRoutes';
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/signup" element={ <Signup /> } />
         <Route element={ <ProtectedRoutes /> } >
           <Route path="/shoppinglist" element={ <ShoppingList /> } />
+          <Route path="/shoppinglist/:shoppingListID" element={ <ProductList /> } />
         </Route>
       </Routes>
     </HistoryRouter>
