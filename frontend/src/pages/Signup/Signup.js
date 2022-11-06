@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import apiUtil from 'utils/api';
-import { setJwt } from 'utils/jwt';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, Grid } from '@mui/material';
+import { ClipLoader } from 'react-spinners';
+import history from 'utils/history';
 import './signup.scss';
 
 const Signup = () => {
   const [ userName, setUserName ] = useState('');
   const [ userEmail, setUserEmail ] = useState('');
   const [ userPassword, setUserPassword ] = useState('');
+  const [ loading, setLoading ] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    apiUtil().post('/user', { name: userName, email: userEmail, password: userPassword })
-      .then((res) => {
-        if (res.data.token) setJwt(res.data.token);
-      });
+    setLoading(true);
+    const data = await apiUtil().post('/user', { name: userName, email: userEmail, password: userPassword });
+    if (data.status === 200) history.push('/');
+    setLoading(false);
   };
 
   return (
@@ -26,7 +28,14 @@ const Signup = () => {
           <TextField id="outlined-basic" label="Name" variant="outlined" onChange={(e) => setUserName(e.target.value)} />
           <TextField id="outlined-basic" label="Email" variant="outlined" onChange={(e) => setUserEmail(e.target.value)} />
           <TextField id="outlined-basic" label="Password" variant="outlined" type='password' onChange={(e) => setUserPassword(e.target.value)} />
-          <Button variant="contained" type='submit'>Signup</Button>
+          <Button disabled={loading} variant="contained" type='submit'>
+            Signup
+          </Button>
+          { loading && (
+            <Grid container justifyContent='center'>
+              <ClipLoader color="#36d7b7" />
+            </Grid>
+          )}
           <Link className='loginLink' to="/"> Login</Link>
         </form>
       </div>
