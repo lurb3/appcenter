@@ -6,6 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { Dialog, DialogTitle, DialogActions, Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import ProductFormModal from './components/Modal';
+import { ClipLoader } from 'react-spinners';
 import './productlist.scss';
 
 const ProductList = () => {
@@ -20,7 +21,7 @@ const ProductList = () => {
 
   const setListsData = async () => {
     const lists = await apiUtil().get(`/product/${shoppingListID}`);
-    if (lists.length > 0) setLists(lists);
+    setLists(lists.data || []);
     setLoading(false);
   };
 
@@ -64,8 +65,6 @@ const ProductList = () => {
     setListsData();
   }, []);
 
-  if (loading) return null;
-
   return (
     <Grid
       container
@@ -79,63 +78,72 @@ const ProductList = () => {
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>{shoppingListName} products</h1>
         <h4 className='colorWhite'>* Edit or remove a product</h4>
-        <Paper>
-          <div className='wrapperHeader'>
-            <Link to={`/shoppinglist`}>
-              <ArrowCircleLeftIcon color='primary' className='return' />
-            </Link>
-            <Grid>
-              <Button className='deleteAll' variant='contained' color='error' onClick={() => setOpenDialog(true)}>
-                Delete all <DeleteIcon />
-              </Button>
-              <Button variant='contained' color='primary' onClick={() => setOpenFormModal(!openFormModal)}>
-                Add new <AddCircleIcon />
-              </Button>
+        <Paper style={{ padding: '10px' }}>
+          { loading ? (
+            <Grid container justifyContent='center' alignItems='center' direction='column'>
+              <ClipLoader color="#36d7b7" />
+              Loading products
             </Grid>
-          </div>
-          <div>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell component="th">Name</TableCell>
-                    <TableCell component="th">Product Link</TableCell>
-                    <TableCell component="th">Quantity</TableCell>
-                    <TableCell component="th">price</TableCell>
-                    <TableCell component="th" align='right'></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {lists.map((list) => (
-                    <TableRow
-                      key={list._id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {
-                          list.productLink && (
-                            <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
-                          )
-                        }
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {list?.quantity}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {list?.price}
-                      </TableCell>
-                      <TableCell component="th" scope="row" align='right'>
-                        <button className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
+          ) : (
+            <>
+              <div className='wrapperHeader'>
+                <Link to={`/shoppinglist`}>
+                  <ArrowCircleLeftIcon color='primary' className='return' />
+                </Link>
+                <Grid>
+                  <Button disabled={loading} className='deleteAll' variant='contained' color='error' onClick={() => setOpenDialog(true)}>
+                    Delete all <DeleteIcon />
+                  </Button>
+                  <Button disabled={loading} variant='contained' color='primary' onClick={() => setOpenFormModal(!openFormModal)}>
+                    Add new <AddCircleIcon />
+                  </Button>
+                </Grid>
+              </div>
+              <div>
+                <TableContainer>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell component="th">Name</TableCell>
+                        <TableCell component="th">Product Link</TableCell>
+                        <TableCell component="th">Quantity</TableCell>
+                        <TableCell component="th">price</TableCell>
+                        <TableCell component="th" align='right'></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {lists.map((list) => (
+                        <TableRow
+                          key={list._id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {
+                              list.productLink && (
+                                <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
+                              )
+                            }
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.quantity}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.price}
+                          </TableCell>
+                          <TableCell component="th" scope="row" align='right'>
+                            <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </div>
+            </>
+          )}
         </Paper>
       </Grid>
     </Grid>
