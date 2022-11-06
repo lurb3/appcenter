@@ -14,7 +14,7 @@ const apiUtil = () => {
 
   api.interceptors.response.use(
     (response) => {
-      return response.data;
+      return response;
     },
     (error) => {
       const response = error.response;
