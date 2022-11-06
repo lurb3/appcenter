@@ -16,7 +16,7 @@ const ShoppingList = () => {
 
   const setListsData = async () => {
     const lists = await apiUtil().get('/shopping_list');
-    if (lists.data.length > 0) setLists(lists.data);
+    setLists(lists.data || []);
     setLoading(false);
   };
 
