@@ -10,6 +10,7 @@ import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ProductFormModal from './components/Modal';
+import { ClipLoader } from 'react-spinners';
 import './productlist.scss';
 
 const ProductList = () => {
