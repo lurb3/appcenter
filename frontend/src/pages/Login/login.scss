@@ -10,15 +10,12 @@
         background-color: white;
         padding: 80px;
         border-radius: 4%;
+        width: 220px;
     }
     
     .formFields {
         display: flex;
         flex-direction: column;
-    
-        & div {
-            margin-bottom: 10px;
-        }
     }
     
     .colorWhite {
