@@ -11,7 +11,6 @@ import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ShareModal from './components/ShareModal';
 import ShoppingFormModal from './components/Modal';
-import { ClipLoader } from 'react-spinners';
 import './shoppinglist.scss';
 
 const ShoppingList = () => {
