@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import apiUtil from 'utils/api';
+import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Dialog, DialogTitle, DialogActions, Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import apiUtil from 'utils/api';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ShoppingFormModal from './components/Modal';
-import { ClipLoader } from 'react-spinners';
 import './shoppinglist.scss';
 
 const ShoppingList = () => {
@@ -38,27 +39,6 @@ const ShoppingList = () => {
     setOpenDialog(false);
   };
 
-  const ConfirmDeleteAll = () => {
-    return (
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(!openDialog)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Delete all shoping Lists and it\'s products?'}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-          <Button onClick={handleDeleteAll} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
   return (
     <Grid
       container
@@ -68,7 +48,7 @@ const ShoppingList = () => {
       className='shoppingListWrapper'
     >
       <ShoppingFormModal open={openFormModal} setOpen={setOpenFormModal} lists={lists} setLists={setLists} />
-      <ConfirmDeleteAll />
+      <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title ={'Delete all shoping Lists and it\'s products?'} />
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>Shopping Lists</h1>
         <h4 className='colorWhite'>* Select, edit or remove a list</h4>

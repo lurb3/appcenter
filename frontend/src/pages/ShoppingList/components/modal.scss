@@ -22,5 +22,20 @@
     .field {
       margin-bottom: 10px;
     }
+
+    .buttonWrapper {
+      display: flex;
+      justify-content: space-around;
+
+      button {
+        width: 100%;
+        &:nth-child(1) {
+          margin-right: 5px;
+        }
+        &:nth-child(2) {
+          margin-left: 5px;
+        }
+      }
+    }
   }
 }
