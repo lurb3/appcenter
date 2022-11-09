@@ -10,7 +10,7 @@ import './modal.scss';
 
 const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
   const [ loading, setLoading ] = useState(false);
-  const [ loginError, setLoginError ] = useState('');
+  const [ apiError, setApiError ] = useState('');
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: joiResolver(addShoppingListSchema),
   });
@@ -19,10 +19,9 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
     e.preventDefault();
     setLoading(true);
     const response = await apiUtil().post('/shopping_list', data);
-
     setLoading(false);
     if (response.status !== 200) {
-      setLoginError(response?.data?.message || 'Error adding shopping list');
+      setApiError(response?.data?.message || 'Error adding shopping list');
       return;
     }
     setLists([ ...lists, response.data ]);
@@ -66,7 +65,7 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
           </Grid>
         )}
         <Button disabled={loading} size='small' variant="contained" type='submit'>Create</Button>
-        {loginError ? <span className='colorRed'>{loginError}</span> : null}
+        {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>
     </Modal>
   );
