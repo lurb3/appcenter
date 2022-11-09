@@ -4,6 +4,7 @@ import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ShoppingFormModal from './components/Modal';
@@ -75,6 +76,8 @@ const ShoppingList = () => {
                       <TableRow>
                         <TableCell component="th">Name</TableCell>
                         <TableCell component="th">Description</TableCell>
+                        <TableCell component="th">Added at</TableCell>
+                        <TableCell component="th">Updated at</TableCell>
                         <TableCell component="th" align='right'></TableCell>
                       </TableRow>
                     </TableHead>
@@ -91,6 +94,12 @@ const ShoppingList = () => {
                           </TableCell>
                           <TableCell component="th" scope="row">
                             {list?.description}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.createdAt && format(parseISO(list.createdAt), 'dd-MM-yyyy')}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy')}
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
                             <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
