@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import Joi from 'joi';
+import { ClipLoader } from 'react-spinners';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { Link } from 'react-router-dom';
-import apiUtil from 'utils/api';
-import { getJwt, setJwt } from 'utils/jwt';
 import { TextField, Button, Grid } from '@mui/material';
+import { getJwt, setJwt } from 'utils/jwt';
+import apiUtil from 'utils/api';
 import history from 'utils/history';
-import { ClipLoader } from 'react-spinners';
+import { loginSchema } from 'utils/schemas/loginSchema';
 import './login.scss';
-
-const schema = Joi.object({
-  email: Joi.string().email({ tlds: { allow: false } }).required(),
-  password: Joi.string().required(),
-});
 
 const Login = () => {
   const [ loading, setLoading ] = useState(false);
   const [ loginError, setLoginError ] = useState('');
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: joiResolver(schema),
+    resolver: joiResolver(loginSchema),
   });
 
-  const onSubmit = async (data, event) => {
-    event.preventDefault();
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
     setLoading(true);
     const response = await apiUtil().post('/user/login', data);
-
     setLoading(false);
-
     if (response.data.token) setJwt(response.data.token);
     if (response.status !== 200) {
       setLoginError(response?.data?.message || 'Error loging in');
@@ -48,6 +41,7 @@ const Login = () => {
       <div className='formWrapper'>
         <form className='formFields' onSubmit={handleSubmit(onSubmit)}>
           <TextField
+            disabled={loading}
             style={{ marginBottom: '10px' }}
             id="outlined-basic"
             label="Email"
@@ -57,6 +51,7 @@ const Login = () => {
             {...register('email')}
           />
           <TextField
+            disabled={loading}
             style={{ marginBottom: '10px' }}
             id="outlined-basic"
             label="Password"
@@ -72,7 +67,7 @@ const Login = () => {
             </Grid>
           )}
           <Button disabled={loading} variant="contained" type='submit'>Login</Button>
-          {loginError ? <span>{loginError}</span> : null}
+          {loginError ? <span className='colorRed'>{loginError}</span> : null}
           <Link className='signupLink' to="/signup">Create new account</Link>
         </form>
       </div>
