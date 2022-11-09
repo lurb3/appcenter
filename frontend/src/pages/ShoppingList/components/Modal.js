@@ -11,7 +11,7 @@ import './modal.scss';
 const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
   const [ loading, setLoading ] = useState(false);
   const [ apiError, setApiError ] = useState('');
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: joiResolver(addShoppingListSchema),
   });
 
@@ -25,8 +25,14 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
       return;
     }
     setLists([ ...lists, response.data ]);
+    closeForm();
+  };
+
+  const closeForm = () => {
+    reset();
     setOpen(!open);
   };
+
   return (
     <Modal
       open={open}
@@ -64,7 +70,10 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
             <ClipLoader color="#36d7b7" />
           </Grid>
         )}
-        <Button disabled={loading} size='small' variant="contained" type='submit'>Create</Button>
+        <div className='buttonWrapper'>
+          <Button disabled={loading} size='small' variant="contained" color='error' onClick={closeForm}>Cancel</Button>
+          <Button disabled={loading} size='small' variant="contained" type='submit'>Create</Button>
+        </div>
         {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>
     </Modal>

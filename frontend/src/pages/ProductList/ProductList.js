@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import apiUtil from 'utils/api';
+import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import { Dialog, DialogTitle, DialogActions, Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import apiUtil from 'utils/api';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ProductFormModal from './components/Modal';
-import { ClipLoader } from 'react-spinners';
 import './productlist.scss';
 
 const ProductList = () => {
@@ -40,27 +41,6 @@ const ProductList = () => {
     setOpenDialog(false);
   };
 
-  const ConfirmDeleteAll = () => {
-    return (
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(!openDialog)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Delete all products for this shopping list?'}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-          <Button onClick={handleDeleteAll} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
   useEffect(() => {
     setListsData();
   }, []);
@@ -74,7 +54,7 @@ const ProductList = () => {
       className='productListWrapper'
     >
       <ProductFormModal shoppingListID={shoppingListID} open={openFormModal} setOpen={setOpenFormModal} lists={lists} setLists={setLists} />
-      <ConfirmDeleteAll />
+      <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title ='Delete all products for this shopping list?' />
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>{shoppingListName} products</h1>
         <h4 className='colorWhite'>* Edit or remove a product</h4>
