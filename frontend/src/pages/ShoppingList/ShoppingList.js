@@ -9,7 +9,6 @@ import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ShoppingFormModal from './components/Modal';
-import { ClipLoader } from 'react-spinners';
 import './shoppinglist.scss';
 
 const ShoppingList = () => {
