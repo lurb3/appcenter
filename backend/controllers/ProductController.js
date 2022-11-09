@@ -7,7 +7,7 @@ const AddProduct = async (req, res) => {
     const { name, price, quantity, productLink } = req.body;
 
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).send({ message: error.details[0].message });
     }
 
     let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId });

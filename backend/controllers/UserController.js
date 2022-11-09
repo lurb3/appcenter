@@ -9,7 +9,7 @@ const UserSignup = async (req, res) => {
     const { name, email, password } = req.body
 
     if (error) {
-        return res.status(400).send(error.details[0].message);
+        return res.status(400).send({ message: error.details[0].message });
     }
 
     let user = await User.findOne({ email: email });
