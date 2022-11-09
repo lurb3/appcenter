@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ProductFormModal from './components/Modal';
@@ -88,6 +89,8 @@ const ProductList = () => {
                         <TableCell component="th">Product Link</TableCell>
                         <TableCell component="th">Quantity</TableCell>
                         <TableCell component="th">price</TableCell>
+                        <TableCell component="th">Added at</TableCell>
+                        <TableCell component="th">Updated at</TableCell>
                         <TableCell component="th" align='right'></TableCell>
                       </TableRow>
                     </TableHead>
@@ -112,6 +115,12 @@ const ProductList = () => {
                           </TableCell>
                           <TableCell component="th" scope="row">
                             {list?.price}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.createdAt && format(parseISO(list.createdAt), 'dd-MM-yyyy')}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy')}
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
                             <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
