@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogActions, Divider, Drawer, Button, List, ListItem } from '@mui/material';
+import { Divider, Drawer, Button, List, ListItem } from '@mui/material';
 import './sidenavmenu.scss';
 import { Link } from 'react-router-dom';
 import { clearJwt } from 'utils/jwt';
+import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import history from 'utils/history';
 
 const SideNavMenu = () => {
@@ -14,27 +15,6 @@ const SideNavMenu = () => {
     history.push('/');
   };
 
-  const ConfirmDeleteAll = () => {
-    return (
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(!openDialog)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to logout?'}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(!openDialog)}>Cancel</Button>
-          <Button onClick={handleLogout} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
   return (
     <Drawer
       anchor="left"
@@ -42,7 +22,7 @@ const SideNavMenu = () => {
       variant="permanent"
       classes={{ paper: 'sideMenu' }}
     >
-      <ConfirmDeleteAll />
+      <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleLogout} title ='Are you sure you want to logout?' />
       <h4>Appcenter Menu</h4>
       <Divider />
       <div className='sideMenuWrapper'>
