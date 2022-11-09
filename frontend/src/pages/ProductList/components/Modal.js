@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
-import apiUtil from 'utils/api';
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { ClipLoader } from 'react-spinners';
 import { TextField, Button, Grid } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import { ClipLoader } from 'react-spinners';
+import { addProductSchema } from 'utils/schemas/productSchema';
+import apiUtil from 'utils/api';
 import './modal.scss';
 
 const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) => {
   const [ loading, setLoading ] = useState(false);
-  const [ productName, setproductName ] = useState('');
-  const [ productQuantity, setProductQuantity ] = useState('');
-  const [ productPrice, setProductPrice ] = useState('');
-  const [ productLink, setProductLink ] = useState('');
+  const [ apiError, setApiError ] = useState('');
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: joiResolver(addProductSchema),
+  });
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (data, e) => {
     e.preventDefault();
     setLoading(true);
-    const res = await apiUtil().post(
-      `/product/${shoppingListID}`,
-      { name: productName, price: productPrice, quantity: productQuantity, productLink: productLink },
-    );
-    if (res.status === 400) return;
+    const response = await apiUtil().post(`/product/${shoppingListID}`, data);
     setLoading(false);
-    setLists([ ...lists, res.data ]);
+    if (response.status !== 200) {
+      setApiError(response?.data?.message || 'Error adding shopping list');
+      return;
+    }
+    setLists([ ...lists, response.data ]);
     setOpen(!open);
   };
   return (
@@ -32,18 +35,61 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
       aria-describedby="modal-modal-description"
       className='productListModal'
     >
-      <form className='formFields' onSubmit={handleSubmit}>
+      <form className='formFields' onSubmit={handleSubmit(onSubmit)}>
         <h3>Add new product</h3>
-        <TextField disabled={loading} className='field' size='small' id="outlined-basic" label="Name" variant="outlined" onChange={(e) => setproductName(e.target.value)} />
-        <TextField disabled={loading} className='field' size='small' id="outlined-basic" label="Product Link" variant="outlined" onChange={(e) => setProductLink(e.target.value)} />
-        <TextField disabled={loading} type="number" className='field' size='small' id="outlined-basic" label="Price" variant="outlined" onChange={(e) => setProductPrice(e.target.value)} />
-        <TextField disabled={loading} type="number" className='field' size='small' id="outlined-basic" label="Quantity" variant="outlined" onChange={(e) => setProductQuantity(e.target.value)} />
+        <TextField
+          disabled={loading}
+          className='field'
+          size='small'
+          id="outlined-basic"
+          label="Name"
+          variant="outlined"
+          error={Boolean(errors.name)}
+          helperText={errors.name ? errors.name.message : ''}
+          {...register('name')}
+        />
+        <TextField
+          disabled={loading}
+          className='field'
+          size='small'
+          id="outlined-basic"
+          label="Product Link"
+          variant="outlined"
+          error={Boolean(errors.productLink)}
+          helperText={errors.productLink ? errors.productLink.message : ''}
+          {...register('productLink')}
+        />
+        <TextField
+          disabled={loading}
+          type="number"
+          className='field'
+          size='small'
+          id="outlined-basic"
+          label="Price"
+          variant="outlined"
+          error={Boolean(errors.price)}
+          helperText={errors.price ? errors.price.message : ''}
+          {...register('price')}
+        />
+        <TextField
+          disabled={loading}
+          type="number"
+          className='field'
+          size='small'
+          id="outlined-basic"
+          label="Quantity"
+          variant="outlined"
+          error={Boolean(errors.quantity)}
+          helperText={errors.quantity ? errors.quantity.message : ''}
+          {...register('quantity')}
+        />
         { loading && (
           <Grid container justifyContent='center'>
             <ClipLoader color="#36d7b7" />
           </Grid>
         )}
         <Button disabled={loading} size='small' variant="contained" type='submit'>Create</Button>
+        {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>
     </Modal>
   );
