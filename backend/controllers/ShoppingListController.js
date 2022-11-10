@@ -36,7 +36,7 @@ const GetAllUserShoppingLists = async (req, res) => {
 }
 
 const GetUserShoppingList = async (req, res) => {
-    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId });
+    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId, userId: req.userId });
 
     if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
 
