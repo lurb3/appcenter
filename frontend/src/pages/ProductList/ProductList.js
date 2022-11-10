@@ -88,7 +88,8 @@ const ProductList = () => {
                         <TableCell component="th">Name</TableCell>
                         <TableCell component="th">Product Link</TableCell>
                         <TableCell component="th">Quantity</TableCell>
-                        <TableCell component="th">price</TableCell>
+                        <TableCell component="th">Price</TableCell>
+                        <TableCell component="th">Notes</TableCell>
                         <TableCell component="th">Added at</TableCell>
                         <TableCell component="th">Updated at</TableCell>
                         <TableCell component="th" align='right'></TableCell>
@@ -115,6 +116,9 @@ const ProductList = () => {
                           </TableCell>
                           <TableCell component="th" scope="row">
                             {list?.price}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {list?.notes}
                           </TableCell>
                           <TableCell component="th" scope="row">
                             {list?.createdAt && format(parseISO(list.createdAt), 'dd-MM-yyyy')}
