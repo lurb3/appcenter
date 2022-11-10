@@ -89,6 +89,17 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
           helperText={errors.quantity ? errors.quantity.message : ''}
           {...register('quantity')}
         />
+        <TextField
+          disabled={loading}
+          className='field'
+          size='small'
+          id="outlined-basic"
+          label="Notes"
+          variant="outlined"
+          error={Boolean(errors.notes)}
+          helperText={errors.notes ? errors.notes.message : ''}
+          {...register('notes')}
+        />
         { loading && (
           <Grid container justifyContent='center'>
             <ClipLoader color="#36d7b7" />
