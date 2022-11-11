@@ -8,42 +8,65 @@ import { addShoppingListSchema } from 'utils/schemas/shoppingListSchema';
 import apiUtil from 'utils/api';
 import './modal.scss';
 
-const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
+const ShoppingFormModal = ({ open, setOpen, lists, setLists, isEditing, setIsEditing, editingList }) => {
   const [ loading, setLoading ] = useState(false);
   const [ apiError, setApiError ] = useState('');
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
     resolver: joiResolver(addShoppingListSchema),
   });
 
   const onSubmit = async (data, e) => {
+    let response = null;
+
     e.preventDefault();
     setLoading(true);
-    const response = await apiUtil().post('/shopping_list', data);
+
+    if (isEditing) {
+      response = await apiUtil().put(`/shopping_list/${editingList._id}`, data);
+    } else {
+      response = await apiUtil().post('/shopping_list', data);
+    }
+
     setLoading(false);
+
     if (response.status !== 200) {
-      setApiError(response?.data?.message || 'Error adding shopping list');
+      setApiError(response?.data?.message || `Error ${isEditing ? 'editing' : 'adding'} shopping list`);
       return;
     }
-    setLists([ ...lists, response.data ]);
+
+    if (isEditing) {
+      const updateList = lists.map((item) => {
+        if (item._id === response.data._id) {
+          item = response.data;
+        }
+        return item;
+      });
+
+      setLists(updateList);
+    } else {
+      setLists([ ...lists, response.data ]);
+    }
     closeForm();
   };
 
   const closeForm = () => {
     reset();
     setOpen(!open);
+    setIsEditing(false);
   };
 
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(!open)}
+      onClose={closeForm}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       className='shoppingListModal'
     >
       <form className='formFields' onSubmit={handleSubmit(onSubmit)}>
-        <h3>Add new shopping list</h3>
+        <h3>{isEditing ? `Editing ${editingList.name}` : 'Add new shopping list'}</h3>
         <TextField
+          defaultValue={isEditing ? editingList.name : ''}
           disabled={loading}
           className='field'
           size='small'
@@ -52,9 +75,11 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
           variant="outlined"
           error={Boolean(errors.name)}
           helperText={errors.name ? errors.name.message : ''}
+          onChange={(e) => setValue('name', e.target.value)}
           {...register('name')}
         />
         <TextField
+          defaultValue={isEditing ? editingList.description : ''}
           disabled={loading}
           className='field'
           size='small'
@@ -63,6 +88,7 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
           variant="outlined"
           error={Boolean(errors.description)}
           helperText={errors.description ? errors.description.message : ''}
+          onChange={(e) => setValue('description', e.target.value)}
           {...register('description')}
         />
         { loading && (
@@ -72,7 +98,9 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists }) => {
         )}
         <div className='buttonWrapper'>
           <Button disabled={loading} size='small' variant="contained" color='error' onClick={closeForm}>Cancel</Button>
-          <Button disabled={loading} size='small' variant="contained" type='submit'>Create</Button>
+          <Button disabled={loading} size='small' variant="contained" type='submit'>
+            {isEditing ? 'Save' : 'Create'}
+          </Button>
         </div>
         {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>

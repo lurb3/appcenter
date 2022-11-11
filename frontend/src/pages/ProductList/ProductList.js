@@ -4,7 +4,8 @@ import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
-import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
@@ -18,6 +19,8 @@ const ProductList = () => {
   const [ openDialog, setOpenDialog ] = useState(false);
   const location = useLocation();
   const { shoppingListID } = useParams();
+  const [ isEditing, setIsEditing ] = useState(false);
+  const [ editingProduct, setEditingProduct ] = useState(false);
 
   const shoppingListName = location.state.name.charAt(0).toUpperCase() + location.state.name.slice(1);
 
@@ -25,6 +28,13 @@ const ProductList = () => {
     const lists = await apiUtil().get(`/product/${shoppingListID}`);
     setLists(lists.data || []);
     setLoading(false);
+  };
+
+  const handleEdit = async (e, list) => {
+    e.preventDefault();
+    setIsEditing(true);
+    setOpenFormModal(true);
+    setEditingProduct(list);
   };
 
   const handleDelete = async (e, item) => {
@@ -54,7 +64,16 @@ const ProductList = () => {
       height='100%'
       className='productListWrapper'
     >
-      <ProductFormModal shoppingListID={shoppingListID} open={openFormModal} setOpen={setOpenFormModal} lists={lists} setLists={setLists} />
+      <ProductFormModal
+        shoppingListID={shoppingListID}
+        open={openFormModal}
+        setOpen={setOpenFormModal}
+        lists={lists}
+        setLists={setLists}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        editingProduct={editingProduct}
+      />
       <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title ='Delete all products for this shopping list?' />
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>{shoppingListName} products</h1>
@@ -127,7 +146,12 @@ const ProductList = () => {
                             {list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy')}
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
-                            <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
+                            <Tooltip title='Edit'>
+                              <Button className='editButton' onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
+                            </Tooltip>
+                            <Tooltip title='Delete'>
+                              <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       ))}
