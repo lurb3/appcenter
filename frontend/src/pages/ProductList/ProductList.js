@@ -35,7 +35,7 @@ const ProductList = () => {
     setIsEditing(true);
     setOpenFormModal(true);
     setEditingProduct(list);
-  }
+  };
 
   const handleDelete = async (e, item) => {
     e.preventDefault();

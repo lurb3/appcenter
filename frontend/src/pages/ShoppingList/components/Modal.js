@@ -33,15 +33,15 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists, isEditing, setIsEdi
       setApiError(response?.data?.message || `Error ${isEditing ? 'editing' : 'adding'} shopping list`);
       return;
     }
-  
-    if  (isEditing) {
-      let updateList = lists.map((item) => {
+
+    if (isEditing) {
+      const updateList = lists.map((item) => {
         if (item._id === response.data._id) {
           item = response.data;
         }
         return item;
       });
-  
+
       setLists(updateList);
     } else {
       setLists([ ...lists, response.data ]);

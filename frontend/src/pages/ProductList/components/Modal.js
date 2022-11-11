@@ -8,7 +8,7 @@ import { addProductSchema } from 'utils/schemas/productSchema';
 import apiUtil from 'utils/api';
 import './modal.scss';
 
-const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEditing, setIsEditing, editingProduct  }) => {
+const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEditing, setIsEditing, editingProduct }) => {
   const [ loading, setLoading ] = useState(false);
   const [ apiError, setApiError ] = useState('');
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -34,14 +34,14 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEd
       return;
     }
 
-    if  (isEditing) {
-      let updateList = lists.map((item) => {
+    if (isEditing) {
+      const updateList = lists.map((item) => {
         if (item._id === response.data._id) {
           item = response.data;
         }
         return item;
       });
-      console.log(response.data)
+
       setLists(updateList);
     } else {
       setLists([ ...lists, response.data ]);
