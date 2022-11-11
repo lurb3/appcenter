@@ -8,7 +8,7 @@ import { addProductSchema } from 'utils/schemas/productSchema';
 import apiUtil from 'utils/api';
 import './modal.scss';
 
-const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) => {
+const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEditing, setIsEditing, editingProduct }) => {
   const [ loading, setLoading ] = useState(false);
   const [ apiError, setApiError ] = useState('');
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -16,34 +16,57 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
   });
 
   const onSubmit = async (data, e) => {
+    let response = null;
+
     e.preventDefault();
     setLoading(true);
-    const response = await apiUtil().post(`/product/${shoppingListID}`, data);
+
+    if (isEditing) {
+      response = await apiUtil().put(`/product/${editingProduct._id}`, data);
+    } else {
+      response = await apiUtil().post(`/product/${shoppingListID}`, data);
+    }
+
     setLoading(false);
+
     if (response.status !== 200) {
-      setApiError(response?.data?.message || 'Error adding shopping list');
+      setApiError(response?.data?.message || `Error ${isEditing ? 'editing' : 'adding'} shopping list`);
       return;
     }
-    setLists([ ...lists, response.data ]);
+
+    if (isEditing) {
+      const updateList = lists.map((item) => {
+        if (item._id === response.data._id) {
+          item = response.data;
+        }
+        return item;
+      });
+
+      setLists(updateList);
+    } else {
+      setLists([ ...lists, response.data ]);
+    }
     closeForm();
   };
 
   const closeForm = () => {
     reset();
     setOpen(!open);
+    setIsEditing(false);
   };
 
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(!open)}
+      onClose={closeForm}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       className='productListModal'
     >
       <form className='formFields' onSubmit={handleSubmit(onSubmit)}>
-        <h3>Add new product</h3>
+        <h3>{isEditing ? `Editing ${editingProduct.name}` : 'Add new product'}</h3>
         <TextField
+          defaultValue={isEditing ? editingProduct.name : ''}
           disabled={loading}
           className='field'
           size='small'
@@ -52,9 +75,11 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
           variant="outlined"
           error={Boolean(errors.name)}
           helperText={errors.name ? errors.name.message : ''}
+          onChange={(e) => setValue('name', e.target.value)}
           {...register('name')}
         />
         <TextField
+          defaultValue={isEditing ? editingProduct.productLink : ''}
           disabled={loading}
           className='field'
           size='small'
@@ -63,9 +88,11 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
           variant="outlined"
           error={Boolean(errors.productLink)}
           helperText={errors.productLink ? errors.productLink.message : ''}
+          onChange={(e) => setValue('productLink', e.target.value)}
           {...register('productLink')}
         />
         <TextField
+          defaultValue={isEditing ? editingProduct.price : ''}
           disabled={loading}
           type="number"
           className='field'
@@ -75,9 +102,11 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
           variant="outlined"
           error={Boolean(errors.price)}
           helperText={errors.price ? errors.price.message : ''}
+          onChange={(e) => setValue('price', e.target.value)}
           {...register('price')}
         />
         <TextField
+          defaultValue={isEditing ? editingProduct.quantity : ''}
           disabled={loading}
           type="number"
           className='field'
@@ -87,7 +116,21 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
           variant="outlined"
           error={Boolean(errors.quantity)}
           helperText={errors.quantity ? errors.quantity.message : ''}
+          onChange={(e) => setValue('quantity', e.target.value)}
           {...register('quantity')}
+        />
+        <TextField
+          defaultValue={isEditing ? editingProduct.notes : ''}
+          disabled={loading}
+          className='field'
+          size='small'
+          id="outlined-basic"
+          label="Notes"
+          variant="outlined"
+          error={Boolean(errors.notes)}
+          helperText={errors.notes ? errors.notes.message : ''}
+          onChange={(e) => setValue('notes', e.target.value)}
+          {...register('notes')}
         />
         { loading && (
           <Grid container justifyContent='center'>
@@ -96,7 +139,9 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists }) =>
         )}
         <div className='buttonWrapper'>
           <Button disabled={loading} size='small' variant="contained" color='error' onClick={closeForm}>Cancel</Button>
-          <Button disabled={loading} size='small' variant="contained" type='submit'>Create</Button>
+          <Button disabled={loading} size='small' variant="contained" type='submit'>
+            {isEditing ? 'Save' : 'Create'}
+          </Button>
         </div>
         {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>

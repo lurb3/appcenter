@@ -1,20 +1,21 @@
 require('dotenv').config();
 const { Product, validate } = require('../models/Product');
 const { ShoppingList } = require('../models/ShoppingList');
+const ObjectId = require('mongodb').ObjectId;
 
 const AddProduct = async (req, res) => {
     const { error } = validate(req.body);
-    const { name, price, quantity, productLink } = req.body;
+    const { name, price, quantity, productLink, notes } = req.body;
 
     if (error) {
         return res.status(400).send({ message: error.details[0].message });
     }
 
-    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId });
+    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId, userId: req.userId });
 
     if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
 
-    let product = await Product.findOne({ name: name.toLowerCase(), shoppingListId: req.params.shoppingListId });
+    let product = await Product.findOne({ name: name.toLowerCase(), shoppingListId: req.params.shoppingListId, userId: req.userId });
 
     if (product) {
         return res.status(400).send({ message: 'You already own that product' });
@@ -25,7 +26,9 @@ const AddProduct = async (req, res) => {
         price: price,
         quantity: quantity,
         productLink: productLink,
-        shoppingListId: req.params.shoppingListId
+        notes: notes,
+        shoppingListId: req.params.shoppingListId,
+        userId: req.userId
     });
 
     await product.save();
@@ -34,11 +37,31 @@ const AddProduct = async (req, res) => {
 }
 
 const GetShoppingListProducts = async (req, res) => {
-    let products = await Product.find({ shoppingListId: req.params.shoppingListId });
+    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId, userId: req.userId });
+
+    if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
+
+    let products = await Product.find({ shoppingListId: req.params.shoppingListId, userId: req.userId });
 
     if (! products) return res.status(404).send({ message: 'Products not found' });
 
     return res.send(products);
+}
+
+const UpdateProduct = async (req, res) => {
+    const { error } = validate(req.body);
+
+    if (error) {
+        return res.status(400).send({ message: error.details[0].message });
+    }
+
+    let editProduct = await Product.findOneAndUpdate({ _id: req.params.productId, userId: req.userId }, { $set: req.body }, {returnDocument: "after"});
+
+    if (! editProduct) {
+        return res.status(404).send({ message: "Product not found" });
+    }
+
+    return res.send(editProduct);
 }
 
 const DeleteProduct = async (req, res) => {
@@ -62,4 +85,4 @@ const DeleteAllShoppingListProducts = async (req, res) => {
     return res.send({ message: `Successfully deleted ${products.deletedCount} product(s)` });
 }
 
-module.exports = { AddProduct, GetShoppingListProducts, DeleteProduct, DeleteAllShoppingListProducts };
+module.exports = { AddProduct, GetShoppingListProducts, UpdateProduct, DeleteProduct, DeleteAllShoppingListProducts };

@@ -36,9 +36,25 @@ const GetAllUserShoppingLists = async (req, res) => {
 }
 
 const GetUserShoppingList = async (req, res) => {
-    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId });
+    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId, userId: req.userId });
 
     if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
+
+    return res.send(shoppingList);
+}
+
+const UpdateShoppingList = async (req, res) => {
+    const { error } = validate(req.body);
+
+    if (error) {
+        return res.status(400).send({ message: error.details[0].message });
+    }
+
+    let shoppingList = await ShoppingList.findOneAndUpdate({ _id: req.params.shoppingListId, userId: req.userId }, {$set: req.body}, {returnDocument: "after"});
+
+    if (!shoppingList) {
+        return res.status(404).send({ message: "Shopping list not found" });
+    }
 
     return res.send(shoppingList);
 }
@@ -69,4 +85,4 @@ const DeleteAllShoppingLists = async (req, res) => {
     return res.send({ message: `Successfully deleted ${shoppingLists.deletedCount} shopping list(s) and ${products.deletedCount} product(s)` });
 }
 
-module.exports = { AddShoppingList, GetAllUserShoppingLists, GetUserShoppingList, DeleteShoppingList, DeleteAllShoppingLists };
+module.exports = { AddShoppingList, GetAllUserShoppingLists, GetUserShoppingList, UpdateShoppingList, DeleteShoppingList, DeleteAllShoppingLists };
