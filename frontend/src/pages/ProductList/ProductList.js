@@ -142,7 +142,7 @@ const ProductList = () => {
                           <TableCell component="th" scope="row">
                             {list?.notes}
                           </TableCell>
-                          <TableCell component="th" scope="row" style={{color: priorityColors[priorityListObj[list.priority] || 'Medium']}}>
+                          <TableCell component="th" scope="row" style={{ color: priorityColors[priorityListObj[list.priority] || 'Medium'] }}>
                             {priorityListObj[list.priority]}
                           </TableCell>
                           <TableCell component="th" scope="row">
