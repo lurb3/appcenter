@@ -55,13 +55,13 @@ const UpdateProduct = async (req, res) => {
         return res.status(400).send({ message: error.details[0].message });
     }
 
-    let editProduct = await Product.updateOne({ _id: req.params.productId, userId: req.userId }, { $set: req.body });
+    let editProduct = await Product.findOneAndUpdate({ _id: req.params.productId, userId: req.userId }, { $set: req.body }, {returnDocument: "after"});
 
-    if (editProduct.matchedCount <= 0) {
+    if (! editProduct) {
         return res.status(404).send({ message: "Product not found" });
     }
 
-    return res.send({ message: "Product updated successfully" });
+    return res.send(editProduct);
 }
 
 const DeleteProduct = async (req, res) => {

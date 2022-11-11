@@ -30,18 +30,22 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists, isEditing, setIsEdi
     setLoading(false);
 
     if (response.status !== 200) {
-      setApiError(response?.data?.message || 'Error adding shopping list');
+      setApiError(response?.data?.message || `Error ${isEditing ? 'editing' : 'adding'} shopping list`);
       return;
     }
-
-    let updateList = lists.map((item) => {
-      if (item._id === response.data._id) {
-        item = response.data;
-      }
-      return item;
-    });
-
-    setLists(updateList);
+  
+    if  (isEditing) {
+      let updateList = lists.map((item) => {
+        if (item._id === response.data._id) {
+          item = response.data;
+        }
+        return item;
+      });
+  
+      setLists(updateList);
+    } else {
+      setLists([ ...lists, response.data ]);
+    }
     closeForm();
   };
 
@@ -95,7 +99,8 @@ const ShoppingFormModal = ({ open, setOpen, lists, setLists, isEditing, setIsEdi
         <div className='buttonWrapper'>
           <Button disabled={loading} size='small' variant="contained" color='error' onClick={closeForm}>Cancel</Button>
           <Button disabled={loading} size='small' variant="contained" type='submit'>
-            {isEditing ? 'Save' : 'Create'}</Button>
+            {isEditing ? 'Save' : 'Create'}
+          </Button>
         </div>
         {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>

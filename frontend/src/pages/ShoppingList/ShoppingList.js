@@ -121,7 +121,7 @@ const ShoppingList = () => {
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
                             <Tooltip title='Edit'>
-                              <Button className='editButton' onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
+                              <Button onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
                             </Tooltip>
                             <Tooltip title='Delete'>
                               <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
