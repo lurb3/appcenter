@@ -8,6 +8,7 @@ const ProductSchema = new mongoose.Schema({
     productLink: String,
     notes: String,
     shoppingListId: { type: mongoose.Schema.Types.ObjectId, ref: 'ShoppingList' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 
 const validateProduct = (list) => {

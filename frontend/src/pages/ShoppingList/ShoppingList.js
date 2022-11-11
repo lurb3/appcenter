@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
@@ -15,6 +16,8 @@ const ShoppingList = () => {
   const [ lists, setLists ] = useState([]);
   const [ openFormModal, setOpenFormModal ] = useState(false);
   const [ openDialog, setOpenDialog ] = useState(false);
+  const [ isEditing, setIsEditing ] = useState(false);
+  const [ editingList, setEditingList ] = useState(false);
 
   const setListsData = async () => {
     const lists = await apiUtil().get('/shopping_list');
@@ -25,6 +28,13 @@ const ShoppingList = () => {
   useEffect(() => {
     setListsData();
   }, []);
+
+  const handleEdit = async (e, list) => {
+    e.preventDefault();
+    setIsEditing(true);
+    setOpenFormModal(true);
+    setEditingList(list);
+  }
 
   const handleDelete = async (e, item) => {
     e.preventDefault();
@@ -48,7 +58,15 @@ const ShoppingList = () => {
       height='100%'
       className='shoppingListWrapper'
     >
-      <ShoppingFormModal open={openFormModal} setOpen={setOpenFormModal} lists={lists} setLists={setLists} />
+      <ShoppingFormModal
+        open={openFormModal}
+        setOpen={setOpenFormModal}
+        lists={lists}
+        setLists={setLists}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        editingList={editingList}
+      />
       <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title ={'Delete all shoping Lists and it\'s products?'} />
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>Shopping Lists</h1>
@@ -102,7 +120,12 @@ const ShoppingList = () => {
                             {list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy')}
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
-                            <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
+                            <Tooltip title='Edit'>
+                              <Button className='editButton' onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
+                            </Tooltip>
+                            <Tooltip title='Delete'>
+                              <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
+                            </Tooltip>
                           </TableCell>
                         </TableRow>
                       ))}
