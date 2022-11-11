@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ClipLoader } from 'react-spinners';
-import { TextField, Button, Grid } from '@mui/material';
+import { TextField, Button, Grid, Select, MenuItem, InputLabel, FormControl  } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { addProductSchema } from 'utils/schemas/productSchema';
 import apiUtil from 'utils/api';
+import { priorityValues, priorityColors } from 'constants/priority';
 import './modal.scss';
 
 const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEditing, setIsEditing, editingProduct }) => {
@@ -132,12 +133,30 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEd
           onChange={(e) => setValue('notes', e.target.value)}
           {...register('notes')}
         />
+        <FormControl fullWidth>
+        <InputLabel id="priority-select-label">Priority</InputLabel>
+        <Select
+          defaultValue={isEditing ? editingProduct.priority : ''}
+          labelId="priority-select-label"
+          id="outlined-basic"
+          label="Priority"
+          error={Boolean(errors.priority)}
+          onChange={(e) => setValue('priority', e.target.value)}
+          {...register('priority')}
+        >
+          {
+            priorityValues.map((p) => (
+              <MenuItem style={{color: priorityColors[p]}} key={p} value={p}>{p}</MenuItem>
+            ))
+          }
+        </Select>
+        </FormControl>
         { loading && (
           <Grid container justifyContent='center'>
             <ClipLoader color="#36d7b7" />
           </Grid>
         )}
-        <div className='buttonWrapper'>
+        <div className='buttonWrapper' style={{marginTop: '10px'}}>
           <Button disabled={loading} size='small' variant="contained" color='error' onClick={closeForm}>Cancel</Button>
           <Button disabled={loading} size='small' variant="contained" type='submit'>
             {isEditing ? 'Save' : 'Create'}

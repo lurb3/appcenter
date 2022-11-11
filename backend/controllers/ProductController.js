@@ -28,7 +28,7 @@ const AddProduct = async (req, res) => {
         productLink: productLink,
         notes: notes,
         shoppingListId: req.params.shoppingListId,
-        priority: priority,
+        priority: priority || 'Medium',
         userId: req.userId
     });
 
