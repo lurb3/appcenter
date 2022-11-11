@@ -5,7 +5,7 @@ const ObjectId = require('mongodb').ObjectId;
 
 const AddProduct = async (req, res) => {
     const { error } = validate(req.body);
-    const { name, price, quantity, productLink, notes } = req.body;
+    const { name, price, quantity, productLink, notes, priority } = req.body;
 
     if (error) {
         return res.status(400).send({ message: error.details[0].message });
@@ -28,6 +28,7 @@ const AddProduct = async (req, res) => {
         productLink: productLink,
         notes: notes,
         shoppingListId: req.params.shoppingListId,
+        priority: priority,
         userId: req.userId
     });
 
