@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Product, validate } = require('../models/Product');
 const { ShoppingList } = require('../models/ShoppingList');
-const ObjectId = require('mongodb').ObjectId;
+const { priorityList } = require('../constants/priority');
 
 const AddProduct = async (req, res) => {
     const { error } = validate(req.body);
@@ -28,7 +28,7 @@ const AddProduct = async (req, res) => {
         productLink: productLink,
         notes: notes,
         shoppingListId: req.params.shoppingListId,
-        priority: priority || 'Medium',
+        priority: priority !== null ? parseInt(priority) : priorityList['Medium'],
         userId: req.userId
     });
 
@@ -42,7 +42,7 @@ const GetShoppingListProducts = async (req, res) => {
 
     if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
 
-    let products = await Product.find({ shoppingListId: req.params.shoppingListId, userId: req.userId });
+    let products = await Product.find({ shoppingListId: req.params.shoppingListId, userId: req.userId }).sort({priority: -1});
 
     if (! products) return res.status(404).send({ message: 'Products not found' });
 

@@ -6,10 +6,10 @@ import { TextField, Button, Grid, Select, MenuItem, InputLabel, FormControl  } f
 import Modal from '@mui/material/Modal';
 import { addProductSchema } from 'utils/schemas/productSchema';
 import apiUtil from 'utils/api';
-import { priorityValues, priorityColors } from 'constants/priority';
+import { priorityListObj, priorityList, priorityColors } from 'constants/priority';
 import './modal.scss';
 
-const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEditing, setIsEditing, editingProduct }) => {
+const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEditing, setIsEditing, editingProduct, setListsData }) => {
   const [ loading, setLoading ] = useState(false);
   const [ apiError, setApiError ] = useState('');
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -36,14 +36,7 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEd
     }
 
     if (isEditing) {
-      const updateList = lists.map((item) => {
-        if (item._id === response.data._id) {
-          item = response.data;
-        }
-        return item;
-      });
-
-      setLists(updateList);
+      setListsData()
     } else {
       setLists([ ...lists, response.data ]);
     }
@@ -145,9 +138,9 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEd
           {...register('priority')}
         >
           {
-            priorityValues.map((p) => (
-              <MenuItem style={{color: priorityColors[p]}} key={p} value={p}>{p}</MenuItem>
-            ))
+            Object.keys(priorityList).map((p) => {
+              return <MenuItem style={{color: priorityColors[p]}} key={p} value={priorityList[p]}>{p}</MenuItem>
+            })
           }
         </Select>
         </FormControl>

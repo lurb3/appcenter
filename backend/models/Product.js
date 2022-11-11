@@ -7,7 +7,7 @@ const ProductSchema = new mongoose.Schema({
     quantity: Number,
     productLink: String,
     notes: String,
-    priority: {type: String, default: 'Medium'},
+    priority: {type: Number, default: 2},
     shoppingListId: { type: mongoose.Schema.Types.ObjectId, ref: 'ShoppingList' },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
@@ -19,7 +19,7 @@ const validateProduct = (list) => {
         quantity: Joi.number().min(1).max(9999).allow(null, ''),
         productLink: Joi.string().uri().min(5).max(255).allow(null, ''),
         notes: Joi.string().min(5).max(1000).allow(null, ''),
-        priority: Joi.string().valid('Very high', 'High', 'Medium', 'Low', 'Very low').allow(null, '')
+        priority: Joi.number().min(0).max(4).allow(null, '')
     });
     return schema.validate(list);
 }
