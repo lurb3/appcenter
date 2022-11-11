@@ -6,6 +6,7 @@ const addProductSchema = Joi.object({
   quantity: Joi.number().min(1).max(9999).allow(null, ''),
   productLink: Joi.string().uri().min(5).max(255).allow(null, ''),
   notes: Joi.string().min(5).max(1000).allow(null, ''),
+  priority: Joi.number().min(0).max(4).allow(null, ''),
 });
 
 export { addProductSchema };
