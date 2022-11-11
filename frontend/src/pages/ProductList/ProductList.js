@@ -10,6 +10,7 @@ import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
 import ProductFormModal from './components/Modal';
+import { priorityColors } from 'constants/priority';
 import './productlist.scss';
 
 const ProductList = () => {
@@ -109,6 +110,7 @@ const ProductList = () => {
                         <TableCell component="th">Quantity</TableCell>
                         <TableCell component="th">Price</TableCell>
                         <TableCell component="th">Notes</TableCell>
+                        <TableCell component="th">Priority</TableCell>
                         <TableCell component="th">Added at</TableCell>
                         <TableCell component="th">Updated at</TableCell>
                         <TableCell component="th" align='right'></TableCell>
@@ -138,6 +140,9 @@ const ProductList = () => {
                           </TableCell>
                           <TableCell component="th" scope="row">
                             {list?.notes}
+                          </TableCell>
+                          <TableCell component="th" scope="row" style={{color: priorityColors[list?.priority || 'Medium']}}>
+                            {list?.priority}
                           </TableCell>
                           <TableCell component="th" scope="row">
                             {list?.createdAt && format(parseISO(list.createdAt), 'dd-MM-yyyy')}
