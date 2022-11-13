@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { ClipLoader } from 'react-spinners';
-import { TextField, Button, Grid, Modal, } from '@mui/material';
+import { TextField, Button, Grid, Modal } from '@mui/material';
 import apiUtil from 'utils/api';
 
 const inputUserEmailSchema = Joi.object({
-  email: Joi.string().email({tlds:{allow: false}}).required(),
+  email: Joi.string().email({ tlds: { allow: false } }).required(),
 });
 
 const ShareModal = ({ open, close, list }) => {
@@ -20,7 +20,7 @@ const ShareModal = ({ open, close, list }) => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
     setLoading(true);
-    let response = await apiUtil().put(`/shopping_list/share/${list._id}`, data);
+    const response = await apiUtil().put(`/shopping_list/share/${list._id}`, data);
     setLoading(false);
 
     if (response.status !== 200) {
@@ -29,7 +29,7 @@ const ShareModal = ({ open, close, list }) => {
     }
 
     closeForm();
-  }
+  };
 
   const closeForm = () => {
     reset();
@@ -73,7 +73,7 @@ const ShareModal = ({ open, close, list }) => {
         {apiError ? <span className='colorRed'>{apiError}</span> : null}
       </form>
     </Modal>
-  )
-}
+  );
+};
 
 export default ShareModal;
