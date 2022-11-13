@@ -33,7 +33,7 @@ const ShoppingList = () => {
   const getUserId = async () => {
     const getId = await apiUtil().get('/user/getid');
     setUserId(getId.data);
-  }
+  };
 
   useEffect(() => {
     setListsData();
@@ -51,7 +51,7 @@ const ShoppingList = () => {
     e.preventDefault();
     setOpenShareModal(true);
     setCurrentList(list);
-  }
+  };
 
   const handleDelete = async (e, list) => {
     e.preventDefault();
