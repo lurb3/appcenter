@@ -46,4 +46,8 @@ const UserSignin = async (req, res) => {
     }), });
 }
 
-module.exports = { UserSignup, UserSignin };
+const GetUserId = async (req, res) => {
+    return res.send(req.userId);
+}
+
+module.exports = { UserSignup, UserSignin, GetUserId };

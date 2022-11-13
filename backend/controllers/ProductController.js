@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Product, validate } = require('../models/Product');
 const { ShoppingList } = require('../models/ShoppingList');
 const { priorityList } = require('../constants/priority');
+const { ObjectId } = require('mongodb');
 
 const AddProduct = async (req, res) => {
     const { error } = validate(req.body);
@@ -11,7 +12,13 @@ const AddProduct = async (req, res) => {
         return res.status(400).send({ message: error.details[0].message });
     }
 
-    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId, userId: req.userId });
+    let shoppingList = await ShoppingList.findOne({
+        _id: req.params.shoppingListId, 
+        $or: [
+            { userId: req.userId },
+            { sharedUsers: { $in: [req.userId] } }
+        ]
+    });
 
     if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
 
@@ -28,9 +35,14 @@ const AddProduct = async (req, res) => {
         productLink: productLink,
         notes: notes,
         shoppingListId: req.params.shoppingListId,
-        priority: priority !== null ? parseInt(priority) : priorityList['Medium'],
-        userId: req.userId
+        priority: parseInt(priority) >= 0 ? parseInt(priority) : priorityList['Medium'],
+        userId: req.userId,
+        sharedUsers: shoppingList.sharedUsers
     });
+
+    if (shoppingList.userId !== req.userId) {
+        product.userId = shoppingList.userId;
+    }
 
     await product.save();
 
@@ -38,11 +50,22 @@ const AddProduct = async (req, res) => {
 }
 
 const GetShoppingListProducts = async (req, res) => {
-    let shoppingList = await ShoppingList.findOne({ _id: req.params.shoppingListId, userId: req.userId });
+    let shoppingList = await ShoppingList.findOne({
+        _id: req.params.shoppingListId,
+        $or: [
+            { userId: req.userId }, { sharedUsers: { $in: [req.userId] } }
+        ]
+    });
 
     if (! shoppingList) return res.status(404).send({ message: 'Shopping list not found' });
 
-    let products = await Product.find({ shoppingListId: req.params.shoppingListId, userId: req.userId }).sort({priority: -1});
+    let products = await Product.find({
+        shoppingListId: req.params.shoppingListId,
+        $or: [
+            { userId: req.userId },
+            { sharedUsers: { $in: [req.userId] } }
+        ]
+    }).sort({priority: -1});
 
     if (! products) return res.status(404).send({ message: 'Products not found' });
 
@@ -56,7 +79,13 @@ const UpdateProduct = async (req, res) => {
         return res.status(400).send({ message: error.details[0].message });
     }
 
-    let editProduct = await Product.findOneAndUpdate({ _id: req.params.productId, userId: req.userId }, { $set: req.body }, {returnDocument: "after"});
+    let editProduct = await Product.findOneAndUpdate({
+        _id: req.params.productId, 
+        $or: [
+            { userId: req.userId },
+            { sharedUsers: { $in: [req.userId] } }
+        ]
+    }, { $set: req.body }, {returnDocument: "after"});
 
     if (! editProduct) {
         return res.status(404).send({ message: "Product not found" });
@@ -66,7 +95,13 @@ const UpdateProduct = async (req, res) => {
 }
 
 const DeleteProduct = async (req, res) => {
-    let productToDelete = await Product.deleteOne({ _id: req.params.productId });
+    let productToDelete = await Product.deleteOne({
+        _id: req.params.productId, 
+        $or: [
+            { userId: req.userId },
+            { sharedUsers: { $in: [req.userId] } }
+        ]
+    });
 
     if (productToDelete.deletedCount > 0) {
         return res.send({ message: "Product deleted successfully" });
@@ -76,7 +111,13 @@ const DeleteProduct = async (req, res) => {
 }
 
 const DeleteAllShoppingListProducts = async (req, res) => {
-    let products = await Product.deleteMany({ shoppingListId: req.params.shoppingListId });
+    let products = await Product.deleteMany({
+        shoppingListId: req.params.shoppingListId,
+        $or: [
+            { userId: req.userId },
+            { sharedUsers: { $in: [req.userId] } }
+        ]
+    });
 
     if (! products) return res.status(404).send({ message: 'Products not found' });
     
