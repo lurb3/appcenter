@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const ShoppingListSchema = new mongoose.Schema({
     name: String,
     description: String,
+    sharedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true });
 
