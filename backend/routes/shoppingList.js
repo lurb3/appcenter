@@ -7,6 +7,7 @@ router.post('/', authJWT, ShoppingListController.AddShoppingList);
 router.get('/', authJWT, ShoppingListController.GetAllUserShoppingLists);
 router.get('/:shoppingListId', authJWT, ShoppingListController.GetUserShoppingList);
 router.put('/:shoppingListId', authJWT, ShoppingListController.UpdateShoppingList);
+router.put('/share/:shoppingListId', authJWT, ShoppingListController.ShareList);
 router.delete('/list/:shoppingListId', authJWT, ShoppingListController.DeleteShoppingList);
 router.delete('/all', authJWT, ShoppingListController.DeleteAllShoppingLists);
 

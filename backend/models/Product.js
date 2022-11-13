@@ -8,6 +8,7 @@ const ProductSchema = new mongoose.Schema({
     productLink: String,
     notes: String,
     priority: {type: Number, default: 2},
+    sharedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     shoppingListId: { type: mongoose.Schema.Types.ObjectId, ref: 'ShoppingList' },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });

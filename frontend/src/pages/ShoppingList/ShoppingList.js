@@ -4,20 +4,25 @@ import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
 import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
+import ShareModal from './components/ShareModal';
 import ShoppingFormModal from './components/Modal';
 import './shoppinglist.scss';
 
 const ShoppingList = () => {
   const [ loading, setLoading ] = useState(true);
   const [ lists, setLists ] = useState([]);
+  const [ currentList, setCurrentList ] = useState(null);
   const [ openFormModal, setOpenFormModal ] = useState(false);
   const [ openDialog, setOpenDialog ] = useState(false);
   const [ isEditing, setIsEditing ] = useState(false);
   const [ editingList, setEditingList ] = useState(false);
+  const [ userId, setUserId ] = useState(false);
+  const [ openShareModal, setOpenShareModal ] = useState(false);
 
   const setListsData = async () => {
     const lists = await apiUtil().get('/shopping_list');
@@ -25,8 +30,14 @@ const ShoppingList = () => {
     setLoading(false);
   };
 
+  const getUserId = async () => {
+    const getId = await apiUtil().get('/user/getid');
+    setUserId(getId.data);
+  }
+
   useEffect(() => {
     setListsData();
+    getUserId();
   }, []);
 
   const handleEdit = async (e, list) => {
@@ -36,17 +47,22 @@ const ShoppingList = () => {
     setEditingList(list);
   };
 
-  const handleDelete = async (e, item) => {
+  const handleShareList = async (e, list) => {
     e.preventDefault();
-    await apiUtil().delete(`/shopping_list/list/${item._id}`);
+    setOpenShareModal(true);
+    setCurrentList(list);
+  }
+
+  const handleDelete = async (e, list) => {
+    e.preventDefault();
+    await apiUtil().delete(`/shopping_list/list/${list._id}`);
     setListsData();
   };
 
   const handleDeleteAll = async (req, res) => {
     setLoading(true);
     await apiUtil().delete(`/shopping_list/all`);
-    setLists([]);
-    setLoading(false);
+    setListsData();
     setOpenDialog(false);
   };
 
@@ -67,7 +83,8 @@ const ShoppingList = () => {
         setIsEditing={setIsEditing}
         editingList={editingList}
       />
-      <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title ={'Delete all shoping Lists and it\'s products?'} />
+      <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title={'Delete all shoping Lists and it\'s products?'} />
+      <ShareModal open={openShareModal} close={() => setOpenShareModal(false)} list={currentList}/>
       <Grid item xs={8} textAlign='center'>
         <h1 className='colorWhite'>Shopping Lists</h1>
         <h4 className='colorWhite'>* Select, edit or remove a list</h4>
@@ -108,6 +125,8 @@ const ShoppingList = () => {
                           <TableCell component="th" scope="row">
                             <Link className='listLink' to={`/shoppinglist/${list?._id}`} state={{ name: list.name }}>
                               {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
+                              {list.userId !== userId && ' (Shared list)'}
+                              {(list.userId === userId && list.sharedUsers.length > 0) && ' (Sharing)'}
                             </Link>
                           </TableCell>
                           <TableCell component="th" scope="row">
@@ -120,6 +139,9 @@ const ShoppingList = () => {
                             {list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy')}
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
+                            <Tooltip title='Share list'>
+                              <Button><PersonAddAltIcon onClick={(e) => handleShareList(e, list)} /></Button>
+                            </Tooltip>
                             <Tooltip title='Edit'>
                               <Button onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
                             </Tooltip>
