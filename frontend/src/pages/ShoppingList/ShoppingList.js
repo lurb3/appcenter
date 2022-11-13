@@ -140,7 +140,7 @@ const ShoppingList = () => {
                           </TableCell>
                           <TableCell component="th" scope="row" align='right'>
                             <Tooltip title='Share list'>
-                              <Button><PersonAddAltIcon onClick={(e) => handleShareList(e, list)} /></Button>
+                              <Button onClick={(e) => handleShareList(e, list)}><PersonAddAltIcon /></Button>
                             </Tooltip>
                             <Tooltip title='Edit'>
                               <Button onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
