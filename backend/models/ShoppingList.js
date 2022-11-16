@@ -10,8 +10,8 @@ const ShoppingListSchema = new mongoose.Schema({
 
 const validateShoppingList = (list) => {
     const schema = Joi.object({
-        name: Joi.string().min(5).max(50).required(),
-        description: Joi.string().min(5).max(250).allow(null, ''),
+        name: Joi.string().max(50).required(),
+        description: Joi.string().max(250).allow(null, ''),
     });
     return schema.validate(list);
 }

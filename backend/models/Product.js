@@ -15,11 +15,11 @@ const ProductSchema = new mongoose.Schema({
 
 const validateProduct = (list) => {
     const schema = Joi.object({
-        name: Joi.string().min(5).max(50).required(),
+        name: Joi.string().max(50).required(),
         price: Joi.number().min(1).max(9999).allow(null, ''),
         quantity: Joi.number().min(1).max(9999).allow(null, ''),
-        productLink: Joi.string().uri().min(5).max(255).allow(null, ''),
-        notes: Joi.string().min(5).max(1000).allow(null, ''),
+        productLink: Joi.string().uri().max(255).allow(null, ''),
+        notes: Joi.string().max(1000).allow(null, ''),
         priority: Joi.number().min(0).max(4).allow(null, '')
     });
     return schema.validate(list);
