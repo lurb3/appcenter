@@ -38,7 +38,7 @@ const ProductFormModal = ({ shoppingListID, open, setOpen, lists, setLists, isEd
     if (isEditing) {
       setListsData();
     } else {
-      setLists([ ...lists, response.data ]);
+      setListsData();
     }
     closeForm();
   };
