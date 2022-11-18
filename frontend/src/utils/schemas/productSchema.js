@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const addProductSchema = Joi.object({
-  name: Joi.string().max(50).required(),
+  name: Joi.string().trim().max(50).required(),
   price: Joi.number().min(1).max(9999).allow(null, ''),
   quantity: Joi.number().min(1).max(9999).allow(null, ''),
   productLink: Joi.string().uri().max(255).allow(null, ''),
