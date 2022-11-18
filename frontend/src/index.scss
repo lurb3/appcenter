@@ -8,9 +8,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#root {
-  height: 100%;
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -18,8 +15,11 @@ code {
 }
 
 .appWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #11223E;
-  height: 100%;
+  min-height: 100vh;
 }
 
 .colorWhite {
