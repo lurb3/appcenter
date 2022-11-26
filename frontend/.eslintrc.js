@@ -26,6 +26,7 @@ module.exports = {
     "array-bracket-spacing": ["warn", "always"],
     "indent": ["warn", 2],
     "max-len": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "require-jsdoc" : 0
   },
 };
