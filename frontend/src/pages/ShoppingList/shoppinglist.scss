@@ -1,5 +1,63 @@
 .shoppingListWrapper {
-  background-color: #11223E;
+  display:flex;
+  margin: auto;
+  @media only screen and (min-width: 809px) {
+    width: 500px;
+    justify-content: center;
+  }
+  .listCard {
+    -webkit-box-shadow: 3px 3px 14px -6px rgba(0,0,0,0.24);
+    -moz-box-shadow: 3px 3px 14px -6px rgba(0,0,0,0.24);
+    box-shadow: 3px 3px 14px -6px rgba(0,0,0,0.24);
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    background-color: #f9f9f9;
+    z-index: 1;
+    cursor: pointer;
+
+    .listCardImg {
+      max-width: 40px;
+      padding-right: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .listCardTitle {
+      font-weight: bold;
+      padding-left: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: initial;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      max-width: 120px;
+      height: 63px;
+      color: #2d2d2d;
+    }
+
+    .listCardDate {
+      color: rgb(170, 170, 170);
+      font-weight: bold;
+      font-size: 13px;
+      padding-left: 5px;
+    }
+  }
+
+  .listCardActions {
+    align-self: center;
+    margin-left: auto;
+    position: absolute;
+    right: 0;
+    z-index:2;
+  }
 
   .deleteAll {
     margin-right: 10px;
