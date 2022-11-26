@@ -15,11 +15,11 @@ const priorityListObj = {
 };
 
 const priorityColors = {
-  'Very high': 'red',
-  'High': '#f66',
-  'Medium': '#fb8910',
-  'Low': '#79ca29',
-  'Very low': '#29ca42',
+  'Very high': '#96020D',
+  'High': '#F24C3F',
+  'Medium': 'rgb(255, 152, 45)',
+  'Low': 'rgb(48, 206, 73)',
+  'Very low': 'rgb(98, 181, 111)',
 };
 
 

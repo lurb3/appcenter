@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { Button, Paper, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material';
+import { Divider, Grid, Tooltip } from '@mui/material';
 import { format, parseISO } from 'date-fns';
 import apiUtil from 'utils/api';
 import ConfirmDialog from 'components/ConfirmDialog/ConfirmDialog';
@@ -59,7 +59,6 @@ const ProductList = () => {
 
   return (
     <Grid
-      container
       justifyContent='center'
       alignItems='center'
       height='100%'
@@ -77,97 +76,66 @@ const ProductList = () => {
         setListsData={setListsData}
       />
       <ConfirmDialog openDialog={openDialog} setOpenDialog={setOpenDialog} callback={handleDeleteAll} title ='Delete all products for this shopping list?' />
-      <Grid item xs={8} textAlign='center'>
+      <Grid item textAlign='center' width="100%">
         <h1 className='colorWhite'>{shoppingListName} products</h1>
         <h4 className='colorWhite'>* Edit or remove a product</h4>
-        <Paper style={{ padding: '10px' }}>
-          { loading ? (
-            <Grid container justifyContent='center' alignItems='center' direction='column'>
-              <ClipLoader color="#36d7b7" />
+        <Grid display='flex' justifyContent='end' padding='10px'>
+          <div style={{ marginRight: 'auto' }}>
+            <Link to={`/shoppinglist`}>
+              <ArrowCircleLeftIcon color='primary' className='return' />
+            </Link>
+          </div>
+          <DeleteIcon style={{ cursor: 'pointer', marginRight: '20px' }} color="error" onClick={() => setOpenDialog(true)} />
+          <AddCircleIcon style={{ cursor: 'pointer' }} color="primary" onClick={() => setOpenFormModal(!openFormModal)} />
+        </Grid>
+        { loading ? (
+          <Grid container justifyContent='center' alignItems='center' direction='column'>
+            <ClipLoader color="#36d7b7" />
               Loading products
-            </Grid>
-          ) : (
-            <>
-              <div className='wrapperHeader'>
-                <Link to={`/shoppinglist`}>
-                  <ArrowCircleLeftIcon color='primary' className='return' />
-                </Link>
-                <Grid>
-                  <Button disabled={loading} className='deleteAll' variant='contained' color='error' onClick={() => setOpenDialog(true)}>
-                    Delete all <DeleteIcon />
-                  </Button>
-                  <Button disabled={loading} variant='contained' color='primary' onClick={() => setOpenFormModal(!openFormModal)}>
-                    Add new <AddCircleIcon />
-                  </Button>
-                </Grid>
-              </div>
-              <div>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell component="th">Name</TableCell>
-                        <TableCell component="th">Product Link</TableCell>
-                        <TableCell component="th">Quantity</TableCell>
-                        <TableCell component="th">Price</TableCell>
-                        <TableCell component="th">Notes</TableCell>
-                        <TableCell component="th">Priority</TableCell>
-                        <TableCell component="th">Added at</TableCell>
-                        <TableCell component="th">Updated at</TableCell>
-                        <TableCell component="th" align='right'></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {lists.map((list) => (
-                        <TableRow
-                          key={list._id}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {list.name.charAt(0).toUpperCase() + list.name.slice(1)}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {
-                              list.productLink && (
-                                <a href={list.productLink} target='_blank' rel="noreferrer">{list.productLink.slice(0, 50)}{list.productLink.length > 50 && '...'}</a>
-                              )
-                            }
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {list?.quantity}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {list?.price}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {list?.notes}
-                          </TableCell>
-                          <TableCell component="th" scope="row" style={{ color: priorityColors[priorityListObj[list.priority] || 'Medium'] }}>
-                            {priorityListObj[list.priority]}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {list?.createdAt && format(parseISO(list.createdAt), 'dd-MM-yyyy')}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy')}
-                          </TableCell>
-                          <TableCell component="th" scope="row" align='right'>
-                            <Tooltip title='Edit'>
-                              <Button className='editButton' onClick={(e) => handleEdit(e, list)}><ModeEditIcon /></Button>
-                            </Tooltip>
-                            <Tooltip title='Delete'>
-                              <Button disabled={loading} className='deleteButton' onClick={(e) => handleDelete(e, list)}><DeleteIcon /></Button>
-                            </Tooltip>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </div>
-            </>
-          )}
-        </Paper>
+          </Grid>
+        ) : (
+          lists.length > 0 && lists.map((list) => (
+            <React.Fragment key={list._id}>
+              <Grid display="flex" maxWidth="100%">
+                <div className="listCard">
+                  <div className="listCardImg">
+                    <img src="" />
+                  </div>
+                  <div onClick={() => history.push(`/shoppinglist/${list?._id}`, { name: list.name })}>
+                    <div className="listCardTitle" style={{ color: priorityColors[priorityListObj[list.priority] || 'Medium'] }}>
+                      { list.name.charAt(0).toUpperCase() + list.name.slice(1) }
+                    </div>
+                    <div> Link: {list.productLink && (
+                      <a href={list.productLink} target='_blank' rel="noreferrer">
+                        {list.productLink.replace(/http(s)?(:)?(\/\/)?|(\/\/)?(www\.)?/g, '').slice(0, 20)}{list.productLink.length > 20 && '...'}
+                      </a>
+                    )}
+                    </div>
+                    <div>
+                      Quantity: {list.quantity ? list.quantity : 'n/a'}
+                    </div>
+                    <div>
+                      Price: {list.price ? list.price : 'n/a'}
+                    </div>
+                    <div>
+                      Notes: {list.notes ? list.notes : 'n/a'}
+                    </div>
+                    <div className="listCardDate">{ list?.updatedAt && format(parseISO(list.updatedAt), 'dd-MM-yyyy') }</div>
+                  </div>
+                  <div className="listCardActions">
+                    <Tooltip title='Edit' style={{ marginRight: '10px', cursor: 'pointer' }}>
+                      <ModeEditIcon fontSize='small' color="primary" onClick={(e) => handleEdit(e, list)} />
+                    </Tooltip>
+                    <Tooltip title='Delete' style={{ marginRight: '10px', cursor: 'pointer' }}>
+                      <DeleteIcon fontSize='small' color="error" onClick={(e) => handleDelete(e, list)} />
+                    </Tooltip>
+                  </div>
+                </div>
+              </Grid>
+              <Divider />
+            </React.Fragment >
+          ))
+        )}
       </Grid>
     </Grid>
   );
