@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { updateUser } from 'slices/userSlice';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { TextField, Button, Grid } from '@mui/material';
 import { getJwt, setJwt } from 'utils/jwt';
@@ -13,6 +15,7 @@ import './login.scss';
 const Login = () => {
   const [ loading, setLoading ] = useState(false);
   const [ loginError, setLoginError ] = useState('');
+  const dispatch = useDispatch();
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: joiResolver(loginSchema),
   });
@@ -27,13 +30,10 @@ const Login = () => {
       setLoginError(response?.data?.message || 'Error loging in');
       return;
     }
+    dispatch(updateUser(response.data.user))
     history.push('/shoppinglist');
   };
 
-  useEffect(() => {
-    const token = getJwt();
-    if (token) history.push('/shoppinglist');
-  }, []);
 
   return (
     <div className='loginWrapper'>

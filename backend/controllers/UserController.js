@@ -41,13 +41,23 @@ const UserSignin = async (req, res) => {
 
     const data = {name: user.name, email: user.email, _id: user._id};
 
-    return res.json({ token: jwt.sign(data, process.env.APP_SECRET, {
-        expiresIn: 86400 //24h
-    }), });
+    return res.json({
+        token: jwt.sign(data, process.env.APP_SECRET, {expiresIn: 86400 }),
+        user: data,
+    });
 }
 
 const GetUserId = async (req, res) => {
     return res.send(req.userId);
 }
 
-module.exports = { UserSignup, UserSignin, GetUserId };
+const GetUser = async (req, res) => {
+    const user = await User.findOne({_id: req.userId});
+
+    if (!user) return res.status(404).json({ message: 'No user found.' });
+
+    const data = {name: user.name, email: user.email, _id: user._id};
+    return res.json({ user: data });
+}
+
+module.exports = { UserSignup, UserSignin, GetUserId, GetUser };

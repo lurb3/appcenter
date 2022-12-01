@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ClipLoader } from 'react-spinners';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -24,7 +25,8 @@ const ShoppingList = () => {
   const [ editingList, setEditingList ] = useState(false);
   const [ userId, setUserId ] = useState(false);
   const [ openShareModal, setOpenShareModal ] = useState(false);
-
+  const user = useSelector((state) => state.user);
+console.log(user)
   const setListsData = async () => {
     const lists = await apiUtil().get('/shopping_list');
     setLists(lists.data || []);
