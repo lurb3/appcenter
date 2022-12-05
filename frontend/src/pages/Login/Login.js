@@ -30,7 +30,7 @@ const Login = () => {
       setLoginError(response?.data?.message || 'Error loging in');
       return;
     }
-    dispatch(updateUser(response.data.user))
+    dispatch(updateUser(response.data.user));
     history.push('/shoppinglist');
   };
 

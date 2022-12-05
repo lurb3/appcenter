@@ -42,12 +42,20 @@ function SideNavMenu() {
         handleCloseNavMenu();
       },
     },
+    'social': {
+      'name': 'Social',
+      'callback': () => {
+        console.log("qweqwe")
+        history.push('/social');
+        handleCloseNavMenu();
+      },
+    },
   };
   const settings = {
     'Logout': {
       'name': 'logout',
       'callback': () => {
-        handleCloseNavMenu();
+        handleCloseNavMenu(A);
         clearJwt();
         history.push('/');
       },
@@ -136,7 +144,7 @@ function SideNavMenu() {
             {Object.keys(pages).map((page) => (
               <Button
                 key={pages[page].name}
-                onClick={handleCloseNavMenu}
+                onClick={pages[page].callback}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {pages[page].name}

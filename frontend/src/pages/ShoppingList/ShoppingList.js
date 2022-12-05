@@ -26,7 +26,7 @@ const ShoppingList = () => {
   const [ userId, setUserId ] = useState(false);
   const [ openShareModal, setOpenShareModal ] = useState(false);
   const user = useSelector((state) => state.user);
-console.log(user)
+  console.log(user);
   const setListsData = async () => {
     const lists = await apiUtil().get('/shopping_list');
     setLists(lists.data || []);

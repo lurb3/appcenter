@@ -60,4 +60,23 @@ const GetUser = async (req, res) => {
     return res.json({ user: data });
 }
 
-module.exports = { UserSignup, UserSignin, GetUserId, GetUser };
+const GetUsers = async (req, res) => {
+    const perPage = req.body.per_page || 3;
+    const currentPage = req.body.current_page || 0;
+    console.log(req.body)
+    const users = await User
+        .find({}, {name: 1, email: 1})
+        .limit(perPage)
+        .skip(perPage * currentPage)
+        .sort({
+            name: 'asc'
+        });
+
+    const total = await User.countDocuments();
+
+    if (!users) return res.status(404).json({ message: 'No users found.' });
+
+    return res.json({ users: users, total: total, current_page: currentPage, per_page: perPage });
+}
+
+module.exports = { UserSignup, UserSignin, GetUserId, GetUser, GetUsers };
