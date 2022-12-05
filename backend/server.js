@@ -5,11 +5,11 @@ const mongoose = require('mongoose');
 const routes = require('./routes/index');
 const port = parseInt(process.env.PORT, 10) || 4000;
 const url = process.env.MONGO_DB_URL;
-const cron = require('node-cron');
+//const cron = require('node-cron');
 
-cron.schedule('* */10 * * * *', () => {
-  console.log('ping');
-});
+//cron.schedule('* */10 * * * *', () => {
+//  console.log('ping');
+//});
 
 mongoose.connect(url);
 app.use(express.json());
